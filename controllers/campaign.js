@@ -96,7 +96,7 @@ module.exports.renderSendEmail = async (req,res,next)=>{
                 const newLink = `${myServerDomain}/${emailID}/${receiverId}?token=${originalLink}`;
                 return `<a href="${newLink}" ${p2}>${p3}</a>`;
             });
-            transformedBody = transformedBody + `<img alt="sorry" src='${process.env.DOMAIN.toString()}/${campaign._id.toString()}/${receiverId.toString()}/tracker.png' class="CToWUd" data-bit="iit"></img>`;
+            transformedBody = transformedBody + `<img alt="sorry" src='${process.env.DOMAIN.toString()}/MailMetrics/campaigns/open/${campaign._id.toString()}/${receiverId.toString()}/tracker.png' class="CToWUd" data-bit="iit"></img>`;
             return transformedBody;
         }
 
