@@ -253,7 +253,7 @@ module.exports.click=async(req, res) => {
       campaign.data.views = campaign.data.views || [];
       campaign.data.clicks = campaign.data.clicks || [];
       
-      campaign.data.views.push(view);
+    
       campaign.data.clicks.push(click);
 
       await campaign.save();
