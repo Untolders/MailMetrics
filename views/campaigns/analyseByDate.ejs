@@ -1,0 +1,38 @@
+<% layout('/layouts/boilerplate') %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<body>
+    <div style="width: 800px; height: 400px;">
+        <!-- Canvas to render the chart -->
+        <canvas id="myChart" width="800" height="400"></canvas>
+    </div>
+    <!-- Script to render the chart -->
+    <script>
+        // Function to render the chart with dynamic data
+        function renderChart(data) {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: data.datasets
+                },
+                options: {
+                    scales: {
+                        x:{
+                        autoSkip: true,
+                        maxRotation: 90,
+                        minRotation: 90
+                    }
+                ,
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render chart with dynamic data passed from the server
+        renderChart(<%- JSON.stringify(chartData) %>);
+    </script>
+</body>

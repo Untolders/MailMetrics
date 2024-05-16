@@ -1,0 +1,70 @@
+<% layout('/layouts/boilerplate')%>
+
+<style>
+   #filters{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+   }
+   .filter{
+    margin-left: 2.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    opacity: 0.7;
+   }
+
+   .filter:hover{
+    opacity: 1;
+    cursor: pointer;
+   }
+   .filter p{
+    font-size: 0.8rem;
+   }
+   .tax-info{
+    display: none;
+   }
+   .tax-toggle{
+    border: 1px solid black;
+    border-radius: 1rem;
+    height:3.5rem;
+    padding: 1rem;
+    margin-left: 5rem;
+    display: flex;
+    align-items: center;
+   }
+</style>
+
+   
+<div >
+   <h3>Email Templates:</h3>
+   <br/>
+   <form action="/MailMetrics/createEmail" method="get">  
+       <button class="btn btn-success">Add Email Templates</button>
+   </form>
+   <br/>
+   <br/>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-col-sm-1">
+  
+   <% for(let email of allemail){ %>
+    <a href="/MailMetrics/<%=email._id%>" class="listing-links">
+      <div class="card border-success  h-100 "  style="max-width: 18rem;  ">
+         <div class="card-header text-bg-primary"><%= email.title %></div>
+         <div class="card-body text-primary">
+            <h5 class="card-title" style="width:100%;"> <textarea class="text-primary" disabled> <%= email.subject %></textarea></h5>
+           
+         </div>
+         <div class="card-footer   border-success">Sender: <%= email.sender %></div>
+       </div>
+    </a>
+
+    <% } %>
+</div>
+    
+
+
+    
+</div>
+
+

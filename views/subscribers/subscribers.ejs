@@ -1,0 +1,58 @@
+<% layout('/layouts/boilerplate')%>
+
+
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+
+<body>
+   
+     
+
+  <h1>Subscribers List</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>S.No.</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Age</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% let Sno=0; %>
+      <% for(subscriber of allsubscriber) { Sno=Sno+1;%>
+        <tr>
+          <td><%= Sno%></td>  
+          <td><%= subscriber._id %></td>
+          <td><%= subscriber.username %></td>
+          <td><%= subscriber.email %></td>
+          <td><%= subscriber.age %></td>
+          <td>
+            <form action="/MailMetrics/subscribers/<%=subscriber._id %>/update" method="get">
+                   <button><i class="fa-solid fa-pen-to-square"></i></button>
+             </form>
+          </td>
+          <td>
+            <form action="/MailMetrics/subscribers/<%=subscriber._id %>/delete" method="get">
+                   <button><i class="fa-solid fa-trash"></i></button>
+              </form>
+        </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</body>

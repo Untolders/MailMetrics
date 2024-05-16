@@ -1,0 +1,90 @@
+<% layout('/layouts/boilerplate')%>
+<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+<body>
+    <div class="row">
+        <div class="col-8 offset-2">
+        </br> 
+    </br> 
+            <h3>Create New Email</h3>
+            <form method="post" action="/MailMetrics/createEmail" novalidate class="needs-validation" >
+                <div class="mb-3">
+                          
+                    <label for="title" class="form-label">title</label>
+                    <input type="text" name="title" placeholder="Enter subject here" class="form-control" required>
+                    <div class="invalid-feedback">
+                        title should be valid.
+                      </div>
+                    </div>
+
+                <div class="mb-3">
+                          
+                <label for="subject" class="form-label">subject</label>
+                <input type="text" name="subject" placeholder="Enter subject here" class="form-control" required>
+                <div class="invalid-feedback">
+                    subject should be valid.
+                  </div>
+                </div>
+                <div class="mb-3">
+                    <label for="body" class="form-label">Body of Mail</label>
+                    <textarea name="body" id="body" cols="30" rows="10" placeholder="Write body of mail here" class="form-control" required></textarea>
+                    <div class="invalid-feedback">
+                        Body should be valid.
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                          
+                    <label for="sender" class="form-label">sender</label>
+                    <input type="text" name="sender" placeholder="Enter subject here" class="form-control" required>
+                    <div class="invalid-feedback">
+                        sender should be valid.
+                      </div>
+                    </div>
+               
+              
+                
+                
+           
+            <button class="btn btn-dark">ADD</button>
+            
+            </br> 
+        </br> 
+            </form>
+        </div>
+    </div>
+   
+   <script>
+    CKEDITOR.replace('body', {
+    // Add plugins
+    extraPlugins: 'image2,link,button,lineutils',
+    // Define toolbar
+    toolbar: [
+        { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'] },
+        { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+        { name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'] },
+        '/',
+        { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+        { name: 'colors', items: ['TextColor', 'BGColor'] },
+        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+        { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
+        { name: 'links', items: ['Link', 'Unlink'] },
+        { name: 'insert', items: ['Button', 'Line'] },
+        { name: 'headings', items: ['Heading', 'Font', 'FontSize'] }
+    ],
+    // Configure button parameters
+    button: {
+        items: [
+            'Button', 'Link'
+        ]
+    },
+    // Configure line parameters
+    line: {
+        breakBeforeOpen: true,
+        breakAfterOpen: false,
+        breakBeforeClose: false,
+        breakAfterClose: true
+    }
+});
+   </script>
+   
+</body>

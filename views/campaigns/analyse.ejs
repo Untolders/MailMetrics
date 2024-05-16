@@ -1,0 +1,180 @@
+<% layout('/layouts/boilerplate') %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f4f4f4;
+    }
+</style>
+
+
+
+<script>
+    const campaign = <%- JSON.stringify(campaign) %>;
+</script>
+
+<body> 
+    <div style="display: flex; justify-content: space-between;">
+        <div>
+            <h2>Campaign Data:</h2>
+            <div style="width: 800px; height: 400px;">
+                <!-- Canvas to render the chart -->
+                <canvas id="myChart" width="800" height="400"></canvas>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        
+            <div style="display: flex; justify-content: space-between; flex-direction: column;" >
+                <br/>
+        <br/>
+        <div>
+            
+          <form method="get" action="/MailMetrics/campaigns/analyseByDate/<%= campaign._id %>">
+    <% const token=  new Date().getFullYear()+`-`+(new Date().getMonth() + 1).toString().padStart(2, '0') +`-`+ new Date().getDate().toString().padStart(2, '0') ; %>
+    <% console.log("some: ", token); %>
+    <input type="hidden" name="token" value="<%= token %>">
+    <button class="btn btn-dark">Today Data</button>
+</form>
+
+        </div>
+        
+                <div>
+                    <form method="get" action="/MailMetrics/campaigns/analyseByDate/<%= campaign._id %>">
+                        <button class="btn btn-dark">Yesterday Data</button>
+                    </form>
+                </div>
+                <div>
+                    <form method="get" action="/MailMetrics/campaigns/analyseByDate/<%= campaign._id %>">
+                        <button class="btn btn-dark">Last 7 days</button>
+                    </form>
+                </div>
+                <div>
+                    <form method="get" action="/MailMetrics/campaigns/analyseByDate/<%= campaign._id %>">
+                        <button class="btn btn-dark">Last Month</button>
+                    </form>
+                </div>
+                <div>
+                    <form method="get" action="/MailMetrics/campaigns/analyseByDate/<%= campaign._id %>">
+                        <button class="btn btn-dark">Last Year</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    
+<br/>
+<br/>
+<hr/>
+
+    <h1>Receiver List:</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Sends</th>
+                <th>Views</th>
+                <th>Clicks</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let Sno = 0; %>
+            <td>total: <b><%= campaign.receiver.length %></b></td>
+            <td></td>
+            <td>Total</td>
+            <td>====></td>
+            <td><%= campaign.receiver.length %></td>
+                <td><%= campaign.data.views.length %></td>
+                <td><%= campaign.data.clicks.length %></td>
+                <% let done=[]; %>
+            <% for (subscriber of campaign.receiver) { 
+                if(!done.includes(subscriber)){
+                 done.push(subscriber);
+                Sno = Sno + 1; %>
+                
+                <tr>
+                    <td><%= Sno %></td>
+                    <td><%= subscriber.username %></td>
+                    <td><%= subscriber.email %></td>
+                    <td><%= subscriber.age %></td>
+                    <td><%= count.countOccurrences(campaign.receiver, subscriber, 'receiver') %></td>
+                    <td><%= count.countOccurrences(campaign.data.views, subscriber, 'views') %></td>
+                    <td><%= count.countOccurrences(campaign.data.clicks, subscriber, 'clicks') %></td>
+                   
+                </tr>
+                <%}%>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+<script>
+  
+    function renderChart(data) {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        
+        // Define an array of colors for each dataset
+        var colors = [
+            'rgba(255, 99, 132, 0.2)', // For Send Email
+            'rgba(54, 162, 235, 0.2)', // For Views
+            'rgba(255, 206, 86, 0.2)'  // For Clicks
+        ];
+        
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Total Send Email', 'Total Views', 'Total Clicks'],
+                datasets: [
+                    {
+                        label: 'Receiver',
+                        data: [campaign.receiver.length, 0, 0], // Default data for Receiver (count only for Receiver)
+                        backgroundColor: colors[0], // Use color for Receiver
+                        borderColor: colors[0].replace('0.2', '1'), // Use darker shade for border
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Views',
+                        data: [0, campaign.data.views.length, 0], // Default data for Views (count only for Views)
+                        backgroundColor: colors[1], // Use color for Views
+                        borderColor: colors[1].replace('0.2', '1'), // Use darker shade for border
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Clicks',
+                        data: [0, 0, campaign.data.clicks.length], // Default data for Clicks (count only for Clicks)
+                        backgroundColor: colors[2], // Use color for Clicks
+                        borderColor: colors[2].replace('0.2', '1'), // Use darker shade for border
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        autoSkip: true,
+                        maxRotation: 90,
+                        minRotation: 90
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Render chart with dynamic data passed from the server
+    renderChart(<%- JSON.stringify(campaign) %>);
+</script>
+</body>

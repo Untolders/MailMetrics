@@ -1,0 +1,123 @@
+<% layout('/layouts/boilerplate') %>
+
+<script>
+  const email = <%- JSON.stringify(email) %>;
+</script>
+<style>
+  .email-draft-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+  .email-header {
+    border-bottom: 2px solid #dee2e6;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+  .email-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .email-actions {
+    margin-top: 20px;
+  }
+  .email-actions .btn {
+    width: 100px;
+  }
+</style>
+<body>
+  <div class="email-draft-container">
+    <div class="email-header text-center">
+      <h2>Email Draft</h2>
+    </div>
+
+    <div class="card email-card mb-4">
+      <div class="card-body">
+        <h4 class="fw-bold">Title:</h4>
+        <p class="lead"><%= email.title %></p>
+      </div>
+    </div>
+
+    <div class="card email-card mb-4">
+      <div class="card-body">
+        <h4 class="fw-bold">Subject:</h4>
+        <p class="lead"><%= email.subject %></p>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="body" class="form-label"><h4 class="fw-bold">Body of Mail:</h4></label>
+      <textarea name="body" id="body" cols="30" rows="10" placeholder="Write body of mail here"
+        class="form-control " style="height: 100%;" disabled><%= email.body%></textarea>
+
+
+    </div>
+    <!-- <h4 class="fw-bold">Body:</h4>
+    <div class="card email-card mb-4">
+      
+      <div class="card-body" id="body">
+      </div>
+    </div> -->
+
+    <div class="email-actions d-flex justify-content-between">
+      <form method="get" action="/MailMetrics/campaigns/<%= email._id %>/sendEmail" novalidate class="needs-validation">
+        <button class="btn btn-success">Send</button>
+      </form>
+      
+      <a href="/MailMetrics/<%= email._id %>/edit" class="btn btn-warning">Edit</a>
+      <a href="/MailMetrics/<%= email._id %>/delete" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+
+  <script>
+    CKEDITOR.replace('body', {
+      // Add plugins
+      extraPlugins: 'image2,link,button,lineutils',
+      // Define toolbar
+      toolbar: [
+        { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'] },
+        { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+        { name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'] },
+        '/',
+        { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+        { name: 'colors', items: ['TextColor', 'BGColor'] },
+        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+        { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
+        { name: 'links', items: ['Link', 'Unlink'] },
+        { name: 'insert', items: ['Button', 'Line'] },
+        { name: 'headings', items: ['Heading', 'Font', 'FontSize'] }
+      ],
+      // Configure button parameters
+      button: {
+        items: [
+          'Button', 'Link'
+        ]
+      },
+      // Configure line parameters
+      line: {
+        breakBeforeOpen: true,
+        breakAfterOpen: false,
+        breakBeforeClose: false,
+        breakAfterClose: true
+      }
+    });
+  </script>
+  <!-- <script>
+    function createBodyDiv(emailBody) {
+    // Create a new div element
+    const innerDiv = document.createElement('div');
+  
+    // Set the innerHTML of the innerDiv to the email body
+    innerDiv.innerHTML = emailBody;
+  
+    // Get the existing div with id "body"
+    const bodyDiv = document.getElementById('body');
+  
+    // Append the innerDiv to the bodyDiv
+    bodyDiv.appendChild(innerDiv);
+  }
+  createBodyDiv(email.body);
+
+  
+ </script> -->
+
+
+    </body>

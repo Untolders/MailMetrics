@@ -1,0 +1,155 @@
+<% layout('/layouts/boilerplate')%>
+  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+<style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+  <body>
+    <div class="row">
+      <div class="col-8 offset-2">
+        </br>
+        </br>
+        <h3>New Campaign</h3>
+        <form method="post" action="/MailMetrics/campaigns/<%= email.id %>/sendEmail" novalidate
+          class="needs-validation">
+
+          <div class="mb-3">
+
+            <label for="subject" class="form-label">Email Subject</label>
+            <p name="subject">
+              <%= email.subject%>
+            </p>
+
+          </div>
+          <div class="mb-3">
+            <label for="body" class="form-label">Body of Mail</label>
+            <textarea name="body" id="body" cols="30" rows="10" placeholder="Write body of mail here"
+              class="form-control" disabled><%= email.body%></textarea>
+
+
+          </div>
+
+          <div class="mb-3">
+
+            <label for="sender" class="form-label">sender</label>
+            <p name="sender">
+              <%= email.sender%>
+            </p>
+
+            <div class="mb-3">
+
+
+              <br />
+
+
+
+              <div>
+               
+                
+                <h1>Subscribers List</h1>
+                <br/>
+                <br/>
+                <div>
+                  <label for="receivers"><strong>Choose Subscribers: </strong></label> &nbsp;
+                  <input type="checkbox" id="selectAll">
+                  <label for="selectAll">Select all</label>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>S.No.</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Age</th>
+                      <th>Select</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% let Sno=0; %>
+                    <% for(subscriber of allSubscribers) { %>
+                      <%Sno=Sno+1; %>
+                      <tr>
+                        <td><%= Sno %></td>
+                        <td><%= subscriber.username %></td>
+                        <td><%= subscriber.email %></td>
+                        <td><%= subscriber.age %></td>
+                        <td><input type="checkbox" name="subscribers[]" id="subscribers" value="<%= subscriber._id %>"></td>
+                        
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+      
+                <div class="invalid-feedback">
+                  sender should be valid.
+                </div>
+              </div>
+              <br /> <br />
+              <button class="btn btn-dark">Send To Subscribers</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      CKEDITOR.replace('body', {
+        // Add plugins
+        extraPlugins: 'image2,link,button,lineutils',
+        // Define toolbar
+        toolbar: [
+          { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'] },
+          { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+          { name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'] },
+          '/',
+          { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+          { name: 'colors', items: ['TextColor', 'BGColor'] },
+          { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+          { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
+          { name: 'links', items: ['Link', 'Unlink'] },
+          { name: 'insert', items: ['Button', 'Line'] },
+          { name: 'headings', items: ['Heading', 'Font', 'FontSize'] }
+        ],
+        // Configure button parameters
+        button: {
+          items: [
+            'Button', 'Link'
+          ]
+        },
+        // Configure line parameters
+        line: {
+          breakBeforeOpen: true,
+          breakAfterOpen: false,
+          breakBeforeClose: false,
+          breakAfterClose: true
+        }
+      });
+    </script>
+    <script>
+      const selectAllCheckbox = document.querySelector('#selectAll');
+      const subscriberCheckboxes = document.querySelectorAll('input[name="subscribers[]"]');
+    
+      selectAllCheckbox.addEventListener('change', (event) => {
+        subscriberCheckboxes.forEach((checkbox) => {
+          checkbox.checked = event.target.checked;
+        });
+    
+        const selectedSubscribers = Array.from(subscriberCheckboxes)
+          .filter((checkbox) => checkbox.checked)
+          .map((checkbox) => checkbox.value);
+    
+        const selectedSubscribersInput = document.querySelector('#selectedSubscribers');
+        selectedSubscribersInput.value = JSON.stringify(selectedSubscribers);
+      });
+    </script>
+
+  </body>

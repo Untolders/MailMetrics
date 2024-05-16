@@ -1,8 +1,9 @@
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
-const Listing =require("./models/listings.js");
-const { listingSchema,reviewSchema }=require("./schema.js");
-const Review = require("./models/review.js");
+// const Listing =require("./models/listings.js");
+const Campaign =require("./models/campaign.js");
+const { campaignSchema }=require("./schema.js");
+// const Review = require("./models/review.js");
 
 
 
@@ -71,6 +72,19 @@ module.exports.validateListing = (req, res, next) => {
 
 module.exports.validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
+  if (error) {
+    let errmsg = error.details.map((el) => el.message).join(",");
+    console.log("Validation Error:", errmsg);
+    throw new ExpressError(400, errmsg);
+  } else {
+    next();
+  }
+};
+
+
+
+module.exports.validateCampaign = (req, res, next) => {
+  const { error } = campaignSchema.validate(req.body);
   if (error) {
     let errmsg = error.details.map((el) => el.message).join(",");
     console.log("Validation Error:", errmsg);
