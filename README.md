@@ -76,7 +76,7 @@ Developed a robust A/B testing platform to optimize email engagement metrics for
 ### Integration with Email Service Provider:
 
 1. **Email Sending Process:**
-   - **Email API Integration:** The platform integrates with email service providers (e.g., Mailgun, SMTP) to send out email variants to the designated audience.
+   - **Email API Integration:** The platform integrates with email service  (e.g., Nodemailer) to send out email variants to the designated audience.
    - **Tracking Mechanisms:** Each email variant is embedded with tracking pixels or unique identifiers to monitor user interactions.
 
 2. **Metrics Tracking:**
