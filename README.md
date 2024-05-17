@@ -108,4 +108,8 @@ By effectively managing experiments, integrating with email service providers, a
 ### Demo Video Link:
 Provide a link to a demo video showcasing the functionality and features of the A/B testing platform. This video should demonstrate how users can set up experiments, analyze results, and utilize the insights provided by the system.
 
+https://github.com/Untolders/MailMetrics/assets/131255604/efd575f2-29a6-4995-9e97-d2748b0a4d1f
+
+
+
 [Demo Video Link](https://youtu.be/nHf7q36SEU4)
