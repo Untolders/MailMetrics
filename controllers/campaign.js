@@ -155,11 +155,27 @@ function generateLabels() {
 }
 
 function generateData(campaign) {
-    if (!campaign || !campaign.data || !campaign.data.clicks || campaign.data.clicks.length === 0) {
+    
+    if (!campaign || campaign.length === 0) {
         return Array(25).fill(0); // If no data, return an array of zeros for 25 hours
     }
 
-    const timestamps = campaign.data.clicks.map(click => new Date(click.time).getHours());
+  
+    const timestamps = campaign.map(type => {
+        // Log to check if the mapping function is executed
+        try {
+          
+            return new Date(type.time).getHours();
+        } catch (error) {
+            console.error("Error processing click:", error);
+            return null; // Or handle the error in a way appropriate for your application
+        }
+    });
+    
+    
+
+
+ 
     const data = Array(25).fill(0); // Initialize array for 25 hours
     timestamps.forEach(hour => {
         data[hour]++;
@@ -173,9 +189,9 @@ module.exports.analyseByDate = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { token } = req.query;
-        console.log("token: ", token);
         
-        const campaign = await Campaign.findById(id);
+        
+        const campaign = await Campaign.findById(id).populate('receiver data.views.subscriber data.clicks.subscriber');
         
         if (!campaign) {
             req.flash("error", "Campaign not found!");
@@ -184,18 +200,19 @@ module.exports.analyseByDate = async (req, res, next) => {
         
         // Parse the token into a Date object
         const date = new Date(token);
+    
 
         // Filter campaign data by the date
         const filteredViews = campaign.data.views.filter(view => {
             const viewDate = new Date(view.time);
             return viewDate.toDateString() === date.toDateString();
         });
-
+        
         const filteredClicks = campaign.data.clicks.filter(click => {
             const clickDate = new Date(click.time);
             return clickDate.toDateString() === date.toDateString();
         });
-
+       
         const labels = generateLabels(); // Assuming you have a function to generate labels
         const viewsData = generateData(filteredViews); // Assuming you have a function to generate data
         const clicksData = generateData(filteredClicks); // Assuming you have a function to generate data
@@ -214,13 +231,13 @@ module.exports.analyseByDate = async (req, res, next) => {
                 {
                     label: 'Clicks',
                     data: clicksData,
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    borderWidth: 1
+                    backgroundColor: 'rgba(39, 174, 96, 0.2)', // Darker green background color
+                    borderColor: 'rgba(39, 174, 96, 1)', // Darker green border color
+                      borderWidth: 1
                 }
             ]
         };
-
+        
         res.render("campaigns/analyseByDate.ejs", { chartData }); // Pass labels and data to the template
     } catch (error) {
         console.error("Error in analyseByDate:", error);
@@ -229,6 +246,218 @@ module.exports.analyseByDate = async (req, res, next) => {
     }
 };
 
+
+
+
+
+
+// Function to generate labels for each date in a month
+function generateDateLabels(month, year) {
+    const labels = [];
+    const daysInMonth = new Date(year, month , 0).getDate();
+    for (let i = 1; i <= daysInMonth; i++) {
+        labels.push(`${i}`);
+    }
+    return labels;
+}
+
+// Function to generate data for each date in a month
+function generateDateData(campaign, month, year) {
+    if (!campaign || campaign.length === 0) {
+       
+        const daysInMonth = new Date(year, month , 0).getDate();
+        return Array(daysInMonth).fill(0); // If no data, return an array of zeros for each date in the month
+    }
+
+    const timestamps = campaign.map(type => {
+        try {
+            const date = new Date(type.time);
+            
+            if (date.getMonth()+1 === month && date.getFullYear() === year) {
+                return date.getDate() - 1; // Adjusting to zero-based index
+            }
+            return null;
+        } catch (error) {
+            console.error("Error processing data:", error);
+            return null;
+        }
+    });
+
+    
+
+    const daysInMonth = new Date(year, month , 0).getDate();
+    const data = Array(daysInMonth).fill(0); // Initialize array for each date in the month
+    timestamps.forEach(day => {
+        if (day !== null) {
+            data[day]++;
+        }
+    });
+
+    return data;
+}
+
+module.exports.analyseByDateInMonth = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { token } = req.query;
+       
+        const [year, month] = token.split("-");
+        
+
+        const campaign = await Campaign.findById(id).populate('receiver data.views.subscriber data.clicks.subscriber');
+
+        if (!campaign) {
+            req.flash("error", "Campaign not found!");
+            return res.redirect("/MailMetrics");
+        }
+
+        const monthIndex = parseInt(month);
+        const yearNum = parseInt(year);
+        
+
+        // Filter campaign data by the month and year
+        const filteredViews = campaign.data.views.filter(view => {
+            const viewDate = new Date(view.time);
+            return viewDate.getMonth()+1 === monthIndex && viewDate.getFullYear() === yearNum;
+        });
+        
+        
+
+        const filteredClicks = campaign.data.clicks.filter(click => {
+            const clickDate = new Date(click.time);
+            return clickDate.getMonth()+1 === monthIndex && clickDate.getFullYear() === yearNum;
+        });
+
+     
+
+        const labels = generateDateLabels(monthIndex, yearNum); // Function to generate date labels
+        const viewsData = generateDateData(filteredViews, monthIndex, yearNum); // Function to generate date data
+        const clicksData = generateDateData(filteredClicks, monthIndex, yearNum); // Function to generate date data
+
+        console.log("view:",viewsData);
+        console.log("clicks:",clicksData);
+        const chartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Views',
+                    data: viewsData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Clicks',
+                    data: clicksData,
+                    backgroundColor: 'rgba(39, 174, 96, 0.2)',
+                    borderColor: 'rgba(39, 174, 96, 1)',
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        res.render("campaigns/analyseByDateInMonth.ejs", { chartData }); // Pass labels and data to the template
+    } catch (error) {
+        console.error("Error in analyseByDateInMonth:", error);
+        req.flash("error", "Error rendering analysis by date in month");
+        res.redirect("/MailMetrics");
+    }
+};
+
+
+
+
+
+
+// Function to generate labels for each month
+function generateMonthLabels() {
+    const labels = [];
+    for (let i = 0; i < 12; i++) {
+        labels.push(new Date(0, i).toLocaleString('default', { month: 'long' }));
+    }
+    return labels;
+}
+
+// Function to generate data for each month
+function generateMonthData(campaign) {
+    if (!campaign || campaign.length === 0) {
+        return Array(12).fill(0); // If no data, return an array of zeros for 12 months
+    }
+
+    const timestamps = campaign.map(type => {
+        try {
+            return new Date(type.time).getMonth();
+        } catch (error) {
+            console.error("Error processing data:", error);
+            return null;
+        }
+    });
+
+    const data = Array(12).fill(0); // Initialize array for 12 months
+    timestamps.forEach(month => {
+        data[month]++;
+    });
+
+    return data;
+}
+
+module.exports.analyseByMonth = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { token } = req.query;
+        console.log("token: ",token);
+
+        const campaign = await Campaign.findById(id).populate('receiver data.views.subscriber data.clicks.subscriber');
+
+        if (!campaign) {
+            req.flash("error", "Campaign not found!");
+            return res.redirect("/MailMetrics");
+        }
+
+        const date = new Date(token);
+
+        // Filter campaign data by the month
+        const filteredViews = campaign.data.views.filter(view => {
+            const viewDate = new Date(view.time);
+            return  viewDate.getFullYear() === date.getFullYear();
+        });
+
+        const filteredClicks = campaign.data.clicks.filter(click => {
+            const clickDate = new Date(click.time);
+            return  clickDate.getFullYear() === date.getFullYear();
+        });
+
+        const labels = generateMonthLabels(); // Function to generate month labels
+        const viewsData = generateMonthData(filteredViews); // Function to generate month data
+        const clicksData = generateMonthData(filteredClicks); // Function to generate month data
+
+        const chartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Views',
+                    data: viewsData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Clicks',
+                    data: clicksData,
+                    backgroundColor: 'rgba(39, 174, 96, 0.2)',
+                    borderColor: 'rgba(39, 174, 96, 1)',
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        res.render("campaigns/analyseByMonth.ejs", { chartData }); // Pass labels and data to the template
+    } catch (error) {
+        console.error("Error in analyseByMonth:", error);
+        req.flash("error", "Error rendering analysis by month");
+        res.redirect("/MailMetrics");
+    }
+};
 
   
 
@@ -269,7 +498,7 @@ module.exports.click=async(req, res) => {
 
 module.exports.open=async(req, res) => {
 
-    const emailId = 1112123;
+    
     const {campaignId, subscriberId} = req.params
     const buf = Buffer.from([
       0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00,
@@ -308,7 +537,7 @@ module.exports.open=async(req, res) => {
     console.log(campaign.receiver);
     console.log(email.subject);
 
-    console.log(process.env.DOMAIN.toString());
+  
  
     
   };

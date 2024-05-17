@@ -36,6 +36,11 @@ wrapAsync(campaignController.analyse));
 router.get("/analyseByDate/:id", 
 wrapAsync(campaignController.analyseByDate));
 
+router.get("/analyseByMonth/:id", 
+wrapAsync(campaignController.analyseByMonth));
+
+router.get("/analyseByDateInMonth/:id", 
+wrapAsync(campaignController.analyseByDateInMonth));
 
 
 

@@ -8,8 +8,11 @@ const { emailSchema }=require("../schema.js");
 
 // index 
 module.exports.index=async (req, res,next) => {
+   
+  const allCampaigns = await Campaign.find({}).populate('emailId');
+  const allemail = await Email.find({});
 
-  res.render("index.ejs");
+  res.render("index.ejs",{allCampaigns, allemail});
   };
   // index 
 module.exports.email=async (req, res,next) => {
