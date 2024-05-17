@@ -63,14 +63,24 @@ Developed a robust A/B testing platform to optimize email engagement metrics for
 
 3. **Experiment Analysis:**
    - **Data Collection:** The system collects data on user interactions with each email variant, tracking metrics like open rates, click-through rates, and conversion rates.
+  
+     ![Screenshot 2024-05-18 002002](https://github.com/Untolders/MailMetrics/assets/131255604/fbcdb75c-5eaa-47f2-a593-11c3511718aa)
+
    - **Statistical Analysis:** Statistical methods are employed to analyze the collected data and determine the significance of differences between variants. This analysis informs users about which variants are performing better and whether the results are statistically significant.
+     
+![Screenshot 2024-05-18 002701](https://github.com/Untolders/MailMetrics/assets/131255604/bbce017b-a3d7-45c2-930f-0065fa9b0abc)
 
 4. **Experiment Adjustment:**
    - **Variant Optimization:** Based on the analysis, users can make adjustments to underperforming variants or create new variants to test different elements.
+  
+     ![Screenshot 2024-05-18 002106](https://github.com/Untolders/MailMetrics/assets/131255604/4e1b9d98-f3c3-4bd8-a53c-6b5d86d4862d)
+
    - **Duration Extension:** Users have the option to extend the duration of an experiment if initial results are inconclusive or if they want to gather more data for statistical validity.
 
 5. **Experiment Conclusion:**
    - **Result Presentation:** Once an experiment concludes, the platform presents a detailed report summarizing the findings. It highlights the performance of each variant and provides actionable insights for future email campaigns.
+![Screenshot 2024-05-18 002017](https://github.com/Untolders/MailMetrics/assets/131255604/b5b710a3-7e74-4458-af2a-d07fab187ee5)
+
    - **Archiving:** Completed experiments are archived for reference, allowing users to revisit past results and learn from previous tests.
 
 ### Integration with Email Service Provider:
@@ -87,7 +97,13 @@ Developed a robust A/B testing platform to optimize email engagement metrics for
 
 1. **RESTful APIs:**
    - **Experiment Management Endpoints:** APIs handle CRUD operations for experiments, allowing users to create, update, retrieve, and delete experiment data.
+  
+     ![Screenshot 2024-05-18 002106](https://github.com/Untolders/MailMetrics/assets/131255604/d74ca788-a5fc-48be-87ba-67e8d6227dbd)
+
    - **Email Sending Endpoints:** APIs trigger the sending of email variants and track user interactions with sent emails.
+  
+     ![Screenshot 2024-05-18 002529](https://github.com/Untolders/MailMetrics/assets/131255604/09aafcbc-87fb-4770-b2a0-8c60bdba97a9)
+
 
 2. **Database Management:**
    - **Data Storage:** Experiment configurations, email metrics, and user interactions are stored in a relational or NoSQL database (e.g., MongoDB, PostgreSQL) for efficient retrieval and analysis.
