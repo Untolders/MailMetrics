@@ -17,13 +17,14 @@
           <a class="nav-link" href="/MailMetrics/email">Templates</a>
           <a class="nav-link" href="/MailMetrics/subscribers">Subscriber</a>
           
-          <!-- if(typeof currUser == 'undefined' && !currUser){  -->
-          <!-- <a class="nav-link" href="/signup"><b>SignUp</b></a>
-          <a class="nav-link" href="/login"><b>Login</b></a> -->
-           <!-- } 
-          if(typeof currUser !== 'undefined' && currUser){  -->
-          <!-- <a class="nav-link" href="/logout"><b>Logout</b></a> -->
-           <!-- }  -->
+          
+         <% if(typeof currUser == 'undefined' && !currUser){  %>
+          <a class="nav-link" href="/signup"><b>SignUp</b></a>
+          <a class="nav-link" href="/login"><b>Login</b></a>
+          <%   } %> 
+        <%  if(typeof currUser !== 'undefined' && currUser){ %>
+          <a class="nav-link" href="/logout"><b>Logout</b></a>
+         <% }%>  
         </div>
       </div>
     </div>

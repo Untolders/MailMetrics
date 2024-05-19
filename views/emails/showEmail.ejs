@@ -59,11 +59,17 @@
 
     <div class="email-actions d-flex justify-content-between">
       <form method="get" action="/MailMetrics/campaigns/<%= email._id %>/sendEmail" novalidate class="needs-validation">
-        <button class="btn btn-success">Send</button>
+        <button class="btn btn-success"><i class="fa-solid fa-share"></i> &nbsp; Send</button>
       </form>
       
-      <a href="/MailMetrics/<%= email._id %>/edit" class="btn btn-warning">Edit</a>
-      <a href="/MailMetrics/<%= email._id %>/delete" class="btn btn-danger">Delete</a>
+      
+      <form action="/MailMetrics/edit/<%= email._id %>"  method="get">
+        <button class="btn btn-warning"> <i class="fa-solid fa-pen-to-square"></i> &nbsp;Edit </button>
+    </form>
+      
+      <form action="/MailMetrics/delete/<%= email._id %>" method="get" onsubmit="return confirmDelete('<%= email._id %>')">
+        <button class=" btn btn-danger"> <i class="fa-solid fa-trash"></i> &nbsp;Delete</button>
+    </form>
     </div>
   </div>
 
@@ -99,6 +105,22 @@
         breakAfterClose: true
       }
     });
+    function confirmDelete(emailId) {
+            // Display a confirmation popup
+            var result = confirm("Are you sure you want to delete this Email Template? If you proceed, all contribution data related to this Template will also be deleted.");
+
+            if (!result) {
+                // If user cancels, return false to prevent form submission
+                console.log("Deletion canceled.");
+                return false;
+            } else {
+                // If user confirms, proceed with deletion
+                console.log("Item with ID " + emailId + " deleted successfully.");
+                // You can also make an AJAX request to delete the item from the server
+                // After deletion, you can perform any additional actions, such as updating the UI
+                return true; // Allow form submission
+            }
+        }
   </script>
   <!-- <script>
     function createBodyDiv(emailBody) {

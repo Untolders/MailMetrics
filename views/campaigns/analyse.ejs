@@ -105,25 +105,39 @@
         </thead>
         <tbody>
             <% let Sno = 0; %>
-            <td>total: <b><%= campaign.receiver.length %></b></td>
+            <%let total = [];
+            for(let rec of subscriberIds){
+            if(!total.includes(rec)){
+            total.push(rec)} }%>
+            <td>total: <b><%= total.length %></b></td>
             <td></td>
             <td>Total</td>
             <td>====></td>
             <td><%= campaign.receiver.length %></td>
                 <td><%= campaign.data.views.length %></td>
                 <td><%= campaign.data.clicks.length %></td>
-                <% let done=[]; %>
-            <% for (subscriber of campaign.receiver) { 
-                if(!done.includes(subscriber)){
+                <% let done=[];
+                let i=-1; %>
+            <% for (subscriber of subscriberIds) { 
+                i++;
+                if(      !done.includes(subscriber)){
                  done.push(subscriber);
-                Sno = Sno + 1; %>
+                Sno = Sno + 1; 
+                %> 
                 
                 <tr>
                     <td><%= Sno %></td>
-                    <td><%= subscriber.username %></td>
-                    <td><%= subscriber.email %></td>
-                    <td><%= subscriber.age %></td>
-                    <td><%= count.countOccurrences(campaign.receiver, subscriber, 'receiver') %></td>
+                   
+                    <% if (typeof subscriber.email !== undefined ) { %>
+                <td><%= campaign.receiver[i].username %></td>
+                <td><%= campaign.receiver[i].email %></td>
+                <td><%= campaign.receiver[i].age %></td>
+            <% } else { %>
+                <td>Unsubscribed/Deleted</td>
+                <td>Unsubscribed/Deleted</td>
+                <td>Unsubscribed/Deleted</td>
+            <% } %>
+                    <td><%= count.countOccurrences(subscriberIds, subscriber, 'receiver') %></td>
                     <td><%= count.countOccurrences(campaign.data.views, subscriber, 'views') %></td>
                     <td><%= count.countOccurrences(campaign.data.clicks, subscriber, 'clicks') %></td>
                    

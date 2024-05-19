@@ -5,13 +5,25 @@ const passport = require("passport");
 const {saveRedirectUrl} = require("../middleware.js");
 const userController = require("../controllers/users.js");
 
+const {isVerified } = require("../middleware.js");
 
 //signup form
 router.route("/signup")
 .get(userController.userSignupForm)
+
+
 //user sign-up
 .post( wrapAsync(userController.userSignup));
 
+
+//email-verification form
+router.route("/signup/emailVerification")
+
+
+//user email verification
+.post( wrapAsync(userController.emailVerification));
+router.route("/signup/emailVerificationForm")
+.post(userController.emailVerificationForm)
 
 //login form
 router.route("/login")
@@ -21,7 +33,9 @@ router.route("/login")
 saveRedirectUrl,
 passport.authenticate('local',
  { failureRedirect: '/login'
- ,failureFlash:true}),wrapAsync(userController.userLogin)
+ ,failureFlash:true}),
+ isVerified,
+ wrapAsync(userController.userLogin)
 );
 
 

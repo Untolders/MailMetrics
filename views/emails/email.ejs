@@ -44,13 +44,15 @@
    </form>
    <br/>
    <br/>
-
+<% if(allemail.length===0) { %>
+<h3 class="no-campaign-message">You not Created any template!</h3>
+<% } else { %>
 <div class="row row-cols-lg-3 row-cols-md-2 row-col-sm-1">
   
    <% for(let email of allemail){ %>
-    <a href="/MailMetrics/<%=email._id%>" class="listing-links">
-      <div class="card border-success  h-100 "  style="max-width: 18rem;  ">
-         <div class="card-header text-bg-primary"><%= email.title %></div>
+    <a href="/MailMetrics/<%=email._id%>" class="listing-links mb-3 mt-3">
+      <div class="card border-dark  h-100 "  style="max-width: 18rem;  ">
+         <div class="card-header "><%= email.title %></div>
          <div class="card-body text-primary">
             <h5 class="card-title" style="width:100%;"> <textarea class="text-primary" disabled> <%= email.subject %></textarea></h5>
            
@@ -61,7 +63,7 @@
 
     <% } %>
 </div>
-    
+    <% } %>
 
 
     

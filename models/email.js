@@ -17,43 +17,27 @@ const emailSchema = new Schema({
     },
     body : {
         type:String,
-        required:true,
+        
     },
     sender:{
         type:String,
         required:true,
     },
-    // receiver :[
-          
-    //     {
-    //         type:String,
-    //         required:true,
-    //     },
-    // ],
+ 
     createdAt:[{
         type:Date,
         default:Date.now(),
     }
    ],
-
-     
-    
-    
-    // owner:{
-    //     type:Schema.Types.ObjectId,
-    //     ref:"User",
-    // },
+     owner:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+    },
   
    
 
 });
 
-// listingSchema.post("findOneAndDelete",async(email)=>{
-//     if(listing){
-//        await Review.deleteMany({_id:{$in :listing.reviews}});
-        
-//     }
-// });
 
 const Email = mongoose.model("Email",emailSchema);
 

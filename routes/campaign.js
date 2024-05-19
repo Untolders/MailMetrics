@@ -2,44 +2,55 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const campaignController = require("../controllers/campaign.js");
-// const {isLoggedIn} = require("../middleware.js");
-// const { isOwner ,validateListing  } = require("../middleware.js");
-// const {  validateCampaign  } = require("../middleware.js");
+const { isLoggedIn, isCampaignOwner ,isEmailOwner , validateCampaign, isVerified  } = require("../middleware.js");
+
 
 router.get("/" ,
-// isLoggedIn,
-// isOwner,
+isLoggedIn,
+isVerified,
 wrapAsync(campaignController.index));
 
 
 
 
 router.get("/:id/sendEmail" ,
-// isLoggedIn,
-// isOwner,
+isLoggedIn,
+isVerified,
+isEmailOwner,
 wrapAsync(campaignController.renderSendEmail));
 
 
 router.post("/:id/sendEmail" ,
-// isLoggedIn,
-// isOwner,
-// validateCampaign,
+isLoggedIn,
+isVerified,
+isEmailOwner,
 wrapAsync(campaignController.sendEmail));
 
 
+
 router.get("/analyse/:id" ,
-// isLoggedIn,
-// isOwner,
+isLoggedIn,
+isVerified,
+isCampaignOwner,    //error in middleaware donot use it
 wrapAsync(campaignController.analyse));
 
 
 router.get("/analyseByDate/:id", 
+isLoggedIn,
+isVerified,
+isCampaignOwner,   //error in middleaware donot use it
 wrapAsync(campaignController.analyseByDate));
 
 router.get("/analyseByMonth/:id", 
+isLoggedIn,
+isVerified,
+isCampaignOwner,  //error in middleaware donot use it
 wrapAsync(campaignController.analyseByMonth));
 
 router.get("/analyseByDateInMonth/:id", 
+isLoggedIn,
+isVerified,
+isCampaignOwner,  //error in middleaware donot use it
 wrapAsync(campaignController.analyseByDateInMonth));
 
 

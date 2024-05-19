@@ -8,8 +8,8 @@ module.exports.index=async (req, res,next) => {
 
     // Fetch all listings from the database
    
-    
-    const allsubscriber = await Subscriber.find({});
+    const user = req.user;
+    const allsubscriber = await Subscriber.find({owner:user._id});
   
     // Render the "index.ejs" template with the listings data
     res.render("subscribers/subscribers.ejs", { allsubscriber });
@@ -26,15 +26,31 @@ module.exports.renderNewForm =(req,res)=>{
 //post add new
  module.exports.addSubscriber =async(req,res,next)=>{
 
-  const newSubscriber = new Subscriber(req.body);
-  
- 
-  await newSubscriber.save();
-  req.flash("success","New Subscriber Saved!");
-   console.log("ADDED!");
-   res.redirect( "/MailMetrics/subscribers") ;
 
+   try {
  
+
+    // Create a new subscriber
+    const { username, email, age } = req.body;
+    const newSubscriber = new Subscriber({
+        username,
+        email,
+        age,
+        owner: req.user._id
+    });
+
+    await newSubscriber.save();
+
+    req.flash("success", "Successfully subscribed!");
+    res.redirect("/MailMetrics/subscribers");
+} catch (err) {
+    if (err.name === 'MongoError' && err.code === 11000 && err.keyPattern && err.keyPattern.email) {
+        req.flash("error", "You have already the subscriber with this email.");
+    } else {
+        req.flash("error", err.message);
+    }
+    res.redirect("/MailMetrics/subscribers");
+}
 
 };
 

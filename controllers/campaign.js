@@ -13,7 +13,8 @@ const count = require("../utils/helper.js");
 module.exports.index = async (req, res, next) => {
     try {
         // Retrieve all campaigns with populated email data
-        let allCampaigns = await Campaign.find({}).populate('emailId');
+        const user = req.user;
+        let allCampaigns = await Campaign.find({owner:user._id}).populate('emailId');
         
         // Render the view with the populated data
         res.render("campaigns/campaign.ejs", { allCampaigns });
@@ -55,7 +56,8 @@ module.exports.renderSendEmail = async (req,res,next)=>{
                 data: {
                     views: [],
                     clicks: []
-                }
+                },
+               owner:req.user._id
             });
         }
 
@@ -104,7 +106,7 @@ module.exports.renderSendEmail = async (req,res,next)=>{
         for (let receiver of receivers) {
             const unencodedEmailBody = transformLinks(emailBody, receiver._id, myServerDomain, id, false);
             var mailOptions = {
-                from: `${process.env.SENDER_MAIL}`,
+                from: draftEmail.sender,
                 to: receiver.email,
                 subject: draftEmail.subject,
                 html: unencodedEmailBody
@@ -115,10 +117,12 @@ module.exports.renderSendEmail = async (req,res,next)=>{
                     console.log(error);
                 } else {
                     console.log('Email sent: ' + info.response);
+                    req.flash("error", "");
                 }
             });
         }
-
+        req.flash("success", "Email sent successfully!");
+    
         for (let receiver of receivers) {
             campaign.receiver.push(receiver._id);
             await campaign.save();
@@ -137,7 +141,13 @@ module.exports.renderSendEmail = async (req,res,next)=>{
 
 module.exports.analyse = async (req, res, next) => {
     let { id } = req.params;
-    const campaign = await Campaign.findById(id).populate('receiver data.views.subscriber data.clicks.subscriber');
+    const campaign = await Campaign.findById(id).populate('receiver data.views data.clicks');
+    let subscriberIds=[];
+
+    for(let r of campaign.receiver){
+        
+        subscriberIds.push(r._id);
+    }
 
     if (!campaign) {
         req.flash("error", "Campaign not found!");
@@ -145,7 +155,7 @@ module.exports.analyse = async (req, res, next) => {
     }
 
     
-    res.render("campaigns/analyse.ejs",{campaign,count:count});
+    res.render("campaigns/analyse.ejs",{campaign,count:count, subscriberIds});
 };
 
 

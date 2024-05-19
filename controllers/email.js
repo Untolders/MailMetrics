@@ -8,17 +8,17 @@ const { emailSchema }=require("../schema.js");
 
 // index 
 module.exports.index=async (req, res,next) => {
-   
-  const allCampaigns = await Campaign.find({}).populate('emailId');
-  const allemail = await Email.find({});
+   const user = req.user;
+  const allCampaigns = await Campaign.find({owner:user._id}).populate('emailId');
+  const allemail = await Email.find({owner:user._id});
 
   res.render("index.ejs",{allCampaigns, allemail});
   };
   // index 
 module.exports.email=async (req, res,next) => {
-
+  const user = req.user;
   // Fetch all listings from the database
-  const allemail = await Email.find({});
+  const allemail = await Email.find({owner:user._id});
 
   // Render the "index.ejs" template with the listings data
   res.render("emails/email.ejs", { allemail });
@@ -34,26 +34,16 @@ module.exports.renderNewForm =(req,res)=>{
 
 //post add new
  module.exports.createEmail =async(req,res,next)=>{
-  // let response = await geocodingClient.forwardGeocode({
-  //   query: req.body.location,
-  //   limit: 1
-  // })
-  //   .send();
-    
-    
-  // let url=req.file.path;
-  // let filename=req.file.filename;
-  const newEmail = new Email(req.body);
+     const newEmail = new Email(req.body);
   
-   
+
   
-  // newListing.owner = req.user._id;
-  // newListing.image={url,filename};
-  // newListing.geometry=response.body.features[0].geometry;
+  newEmail.owner = req.user._id;
+ 
   await newEmail.save();
   req.flash("success","New Email Saved!");
    
-   res.redirect( "/MailMetrics") ;
+   res.redirect( "/MailMetrics/email") ;
 
  
 
@@ -64,6 +54,7 @@ module.exports.showEmail = async(req,res,next)=>{
 
   let {id} =req.params;
 
+  
   const email = await Email.findById(id);
   
   if(!email){
@@ -76,14 +67,14 @@ module.exports.showEmail = async(req,res,next)=>{
 };
 
 //get edit form
-module.exports.renderEditForm = async (req,res,next)=>{
+module.exports.renderEmailEditForm = async (req,res,next)=>{
   
   let {id} =req.params;
 
   const email = await Email.findById(id);
   if(!email){
     req.flash("error","Not Exist!");
-    res.redirect("/MailMetrics");
+    res.redirect("/MailMetrics/email");
   }
 
   res.render("emails/editEmail.ejs",{email});
@@ -91,19 +82,15 @@ module.exports.renderEditForm = async (req,res,next)=>{
 
 // post edit listing
 module.exports.editEmail = async (req,res,next)=>{
-  // let response = await geocodingClient.forwardGeocode({
-  //   query: req.body.location,
-  //   limit: 1
-  // })
-  //   .send();
+ 
     
-
+  
   let {id} =req.params;
   
  
-  let email = await Email.findByIdAndUpdate(id , {...req.body})
+  let email = await Email.findByIdAndUpdate(id , {...req.body});
  
-  let campaign = await Campaign.find({ emailId: email._id });
+  
 
 
       await email.save();
@@ -117,11 +104,11 @@ module.exports.editEmail = async (req,res,next)=>{
   module.exports.destroyEmail = async(req,res,next)=>{
 
     let {id} =req.params;
-  
+     const campaign = await Campaign.findOneAndDelete({emailId:id});
     const email = await Email.findByIdAndDelete(id);
     console.log("deleted successfully");
     req.flash("success","Email Deleted!");
-    res.redirect("/MailMetrics");
+    res.redirect("/MailMetrics/email");
   
   };
 

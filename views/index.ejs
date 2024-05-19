@@ -59,13 +59,17 @@
         <h2>Recent Campaigns</h2>
        
         <div class="slider" id="campaign-slider">
+          <% if(allCampaigns.length===0){%>
+            <p class="no-campaign-message"> No Recent Campaign!</p>
+
+            <% } else{ %>
             <% for(let i = allCampaigns.length - 1; i >= 0 &&  i>=allCampaigns.length - 10; i--) { %>
             <a href="/MailMetrics/campaigns/analyse/<%= allCampaigns[i]._id%>">
                 <div class="template-item">
                     <% if(allCampaigns[i].emailId.length <=15){ %>
-                        <h3><%= allCampaigns[i].emailId.emailId.title %></h3>
+                        <h3 style="background-color: #c5c7c9; border-radius: 5%;"><%= allCampaigns[i].emailId.emailId.title %></h3>
                     <% } else { %>
-                        <h3><% for(let j=0;j<15;j++){%><%=allCampaigns[i].emailId.title[j]%><%}%>...</h3>
+                        <h3 style="background-color: #c5c7c9; border-radius: 5%;"><% for(let j=0;j<15;j++){%><%=allCampaigns[i].emailId.title[j]%><%}%>...</h3>
                     <% } %>
                     <% if(allCampaigns[i].emailId.subject.length <=27){ %>
                         <p><%= allCampaigns[i].emailId.subject %></p>
@@ -75,19 +79,24 @@
                 </div>
             </a>
             <% } %>
+            <% } %>
          </div>
       </section>
 
       <section id="recent-templates">
         <h2>Recent Templates</h2>
         <div class="slider" id="template-slider">
+          <% if(allemail.length===0){%>
+            <p class="no-campaign-message"> No Recent Template!</p>
+
+            <% } else{ %>
             <% for(let i = allemail.length - 1; i >= 0 &&  i>=allemail.length - 10; i--) { %>
                 <a href="/MailMetrics/<%= allemail[i]._id%>">
                     <div class="template-item">
                         <% if(allemail[i].title.length <=15){ %>
-                            <h3><%= allemail[i].title %></h3>
+                            <h3 style="background-color: #c5c7c9; border-radius: 5%;"><%= allemail[i].title %></h3>
                         <% } else { %>
-                            <h3><% for(let j=0;j<15;j++){%><%=allemail[i].title[j]%><%}%>...</h3>
+                            <h3 style="background-color: #c5c7c9; border-radius: 5%;"><% for(let j=0;j<15;j++){%><%=allemail[i].title[j]%><%}%>...</h3>
                         <% } %>
                         <% if(allemail[i].subject.length <=27){ %>
                             <p><%= allemail[i].subject %></p>
@@ -97,6 +106,7 @@
                         
                     </div>
                 </a>
+            <% } %>
             <% } %>
         </div>
       </section>

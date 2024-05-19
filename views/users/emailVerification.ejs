@@ -4,10 +4,14 @@
         <div class="col-6 offset-3">
       
             <h3>Signup for Wonderlust</h3>
-            <form method="POST" action="/signup" novalidate class="needs-validation">
+            <form method="POST" action="/signup/emailVerification" novalidate class="needs-validation">
+                
+                <input type="hidden" name="id" id="id" class="form-control" value="<%= newUser._id %>" required>
+ 
+               
                 <div class="mb-3">
                   <label for="username" class="form-label">Username</label>
-                  <input type="text" name="username" id="username" class="form-control" required>
+                  <input type="text" name="username" id="username" class="form-control" value=<%= newUser.username %> required disabled>
                   
                   <div class="invalid-feedback">
                     username is required!
@@ -16,23 +20,25 @@
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" id="email"  class="form-control" required>
+                    <input type="email" name="email" id="email"  class="form-control" value=<%= newUser.email %> required disabled>
                      <div class="invalid-feedback">
                         Email should be valid.
                     </div>
                 </div>
               
                 
+                
+
                 <div class="mb-3">
-                        <label for="password" class="form-label">password</label>
-                        <input type="password" name="password" id="password" class="form-control" required>
-                        <div class="invalid-feedback">
-                            password is required!
-                        </div>
-                </div>
+                    <label for="otp" class="form-label">OTP</label>
+                    <input type="string" name="otp" id="otp" class="form-control" required>
+                    <div class="invalid-feedback">
+                        OTP is required!
+                    </div>
+            </div>
                     
               <div>
-                <button class=" btn btn-success offset-3 col-6 mb-3">Verify Email</button>
+                <button class=" btn btn-success offset-3 col-6 mb-3">Signup</button>
               </div>
               
                 

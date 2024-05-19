@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Subscriber = require("./subscriber.js");
+
 
 const campaignSchema = new Schema({
     emailId: {
@@ -38,7 +38,12 @@ const campaignSchema = new Schema({
     sendAt: [{
         type: Date,
         default: () => new Date()
-    }]
+    }],
+    owner:{
+        type: Schema.Types.ObjectId,
+                ref: "User"
+
+    }
 });
 
 module.exports = mongoose.model("Campaign", campaignSchema);

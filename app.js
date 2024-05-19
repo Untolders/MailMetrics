@@ -16,17 +16,15 @@ if (process.env.NODE_ENV != "production") {
   const subscriberRouter = require("./routes/subscriber.js");
   const Campaign = require("./models/campaign.js");
   const Subscriber = require("./models/subscriber.js");
-//   const blogsRouter = require("./routes/blogs.js");
-//   const ReviewRouter = require("./routes/review.js");
-//   const usersRouter = require("./routes/user.js");
-  // const adminsRouter = require("./routes/admin.js");
+ const usersRouter = require("./routes/user.js");
+
   const session = require("express-session");
   const MongoStore = require('connect-mongo');
   const flash = require("connect-flash");
   const passport = require("passport");
-//   const LocalStrategy = require("passport-local");
+  const LocalStrategy = require("passport-local");
   const User = require("./models/user.js");
-  // const Admin = require("./models/admin.js"); 
+
   
   
   
@@ -96,16 +94,16 @@ if (process.env.NODE_ENV != "production") {
   
   app.use(passport.initialize());
   app.use(passport.session());
-  // passport.use(new LocalStrategy(User.authenticate()));
-  // // use static serialize and deserialize of model for passport session support
-  // passport.serializeUser(User.serializeUser());
-  // passport.deserializeUser(User.deserializeUser());
+  passport.use(new LocalStrategy(User.authenticate()));
+  // use static serialize and deserialize of model for passport session support
+  passport.serializeUser(User.serializeUser());
+  passport.deserializeUser(User.deserializeUser());
   
   // // local variable
   app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    // res.locals.currUser = req.user;
+    res.locals.currUser = req.user;
   
     next();
   });
@@ -113,14 +111,14 @@ if (process.env.NODE_ENV != "production") {
   
   
   
-
+  
  
   app.use("/MailMetrics/campaigns", campaignRouter);
   app.use("/MailMetrics/subscribers", subscriberRouter);
   app.use("/MailMetrics", emailRouter);
 
-//   app.use("/", usersRouter);
-  // app.use("/",adminsRouter);
+  app.use("/", usersRouter);
+
   
   
   
@@ -142,7 +140,7 @@ if (process.env.NODE_ENV != "production") {
   });
   
   //if error
-  app.use((err, req, res, next) => {
+  app.use((err, req, res, ) => {
   
   
     console.log(err.name);

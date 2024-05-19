@@ -7,9 +7,17 @@
     </br> 
     
     <h3>Edit id: <%=email._id%></h3>
-            <form method="post" action="/MailMetrics/<%=email._id%>?_method=PUT" novalidate class="needs-validation" >
+    <script type="text/javascript">
+        function validate_editor() {
+            // Update CKEditor instances
+            for (var instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+            }
+        }
+        </script>
+            <form onsubmit="validate_editor();" method="post" action="/MailMetrics/edit/<%=email._id%>?_method=PUT" novalidate class="needs-validation"  >
                
-               
+             
                 <div class="mb-3">
                           
                     <label for="title" class="form-label">title</label>
@@ -29,7 +37,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="body" class="form-label">Body of Mail</label>
-                    <textarea name="body" id="body" cols="30" rows="10" placeholder="Write body of mail here" class="form-control" required><%= email.body%></textarea>
+                    <textarea name="body" id="body" cols="30" rows="10" placeholder="Write body of mail here" class="form-control" required><%= email.body %></textarea>
                     <div class="invalid-feedback">
                         Body should be valid.
                     </div>
@@ -49,7 +57,7 @@
                 
            
             <button class="btn btn-dark">Update</button>
-            
+            <% console.log("in form") %>
             </br> 
         </br> 
             </form>

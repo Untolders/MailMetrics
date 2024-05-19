@@ -1,62 +1,31 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-// const {isLoggedIn} = require("../middleware.js");
-// const { isOwner ,validateListing  } = require("../middleware.js");
+
+const { isLoggedIn, isEmailOwner, validateEmail, isVerified } = require("../middleware.js");
 const emailController = require("../controllers/email.js");
-const multer  = require('multer');
-const {storage} = require("../cloudConfig.js");
-const upload = multer({ storage });
 
-  
-//listing route
-router.get("/",wrapAsync(emailController.index));
+// Listing route
+router.get("/", isLoggedIn,isVerified, wrapAsync(emailController.index));
 
-router.get("/email",wrapAsync(emailController.email));
-//new listing route
-router.route("/createEmail")
-.get(
-  // isLoggedIn,
-  emailController.renderNewForm)
-//adding new listing
-.post(
-  // isLoggedIn,
-  
-  // validateListing,
-   wrapAsync(emailController.createEmail));
+router.get("/email", isLoggedIn,isVerified, wrapAsync(emailController.email));
 
+// New listing route
+router.get("/createEmail", isLoggedIn,isVerified, emailController.renderNewForm);
 
-//Show route
-router
-.route("/:id")
-.get(wrapAsync(emailController.showEmail))
-//Editing listing
-.put(
-  // isLoggedIn,
-  // isOwner,
-  // upload.single('image'),
-  // validateListing,
-   wrapAsync(emailController.editEmail));
+// Adding new listing
+router.post("/createEmail", isLoggedIn,isVerified, validateEmail, wrapAsync(emailController.createEmail));
 
+// Route for editing listing
+router.get("/edit/:id", isLoggedIn, isVerified, isEmailOwner, wrapAsync(emailController.renderEmailEditForm));
 
-//route for editing listing
-router.get("/:id/edit" ,
-// isLoggedIn,
-// isOwner,
- wrapAsync(emailController.renderEditForm));
-
+// Editing listing
+router.put("/edit/:id", isLoggedIn,isVerified,  isEmailOwner, validateEmail, wrapAsync(emailController.editEmail));
 
 // Delete route
-router.get("/:id/delete" ,
-// isLoggedIn,
-// isOwner,
-wrapAsync(emailController.destroyEmail));
+router.get("/delete/:id", isLoggedIn,isVerified,  isEmailOwner, wrapAsync(emailController.destroyEmail));
 
-
-
-
-
+// Show route
+router.get("/:id", isLoggedIn,isVerified,  wrapAsync(emailController.showEmail));
 
 module.exports = router;
-
-

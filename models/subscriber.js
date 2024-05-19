@@ -17,8 +17,14 @@ const subscriberSchema= new Schema({
     age:{
         type:Number,
         required:true,
-    }
+    },
+    owner:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+    },
 });
+
+subscriberSchema.index({ owner: 1, email: 1 }, { unique: true });
 
 
 

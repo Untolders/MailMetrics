@@ -1,45 +1,54 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-// const {isLoggedIn} = require("../middleware.js");
-// const { isOwner ,validateListing  } = require("../middleware.js");
+
+const {isLoggedIn,  validateSubscriber, isSubscrierOwner , isVerified } = require("../middleware.js");
 const subscriberController = require("../controllers/subscriber.js");
 
 
   
 //listing route
-router.get("/",wrapAsync(subscriberController.index));
+router.get("/",
+isLoggedIn,
+isVerified,
+wrapAsync(subscriberController.index));
 
 
 //new listing route
 router.route("/addSubscriber")
 .get(
-  // isLoggedIn,
-  subscriberController.renderNewForm)
+  isLoggedIn,
+  isVerified,
+  (subscriberController.renderNewForm))
 //adding new listing
 .post(
-  // isLoggedIn,
-  
-  // validateListing,
+  isLoggedIn,
+  isVerified,
+   validateSubscriber,
    wrapAsync(subscriberController.addSubscriber));
 
 
 //route for editing listing
+
 router.get("/:id/update" ,
-// isLoggedIn,
-// isOwner,
- wrapAsync(subscriberController.renderUpdateForm));
+isLoggedIn,
+isVerified,
+isSubscrierOwner,
+ (subscriberController.renderUpdateForm));
  
  router.post("/:id/update" ,
-// isLoggedIn,
-// isOwner,
+isLoggedIn,
+isVerified,
+isSubscrierOwner,
+validateSubscriber,
  wrapAsync(subscriberController.updateSubscriber));
 
 
 // Delete route
 router.get("/:id/delete" ,
-// isLoggedIn,
-// isOwner,
+isLoggedIn,
+isVerified,
+isSubscrierOwner,
 wrapAsync(subscriberController.deleteSubscriber));
 
 

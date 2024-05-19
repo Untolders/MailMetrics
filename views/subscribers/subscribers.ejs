@@ -1,65 +1,92 @@
 <% layout('/layouts/boilerplate')%>
 
-
-  <style>
+<style>
     table {
-      width: 100%;
-      border-collapse: collapse;
+        width: 100%;
+        border-collapse: collapse;
     }
-    th, td {
-      padding: 8px 12px;
-      border: 1px solid #ddd;
+
+    th,
+    td {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
     }
+
     th {
-      background-color: #f4f4f4;
+        background-color: #f4f4f4;
     }
-  </style>
+</style>
 
 <body>
-   
-     
+    <h1>Subscribers List</h1>
+    <br/>
+    <form action="/MailMetrics/subscribers/addSubscriber" method="get">
+        <button class="btn btn-success">Add Email Subscriber</button>
+    </form>
+    <br/>
+    <br/>
 
-  <h1>Subscribers List</h1>
-  <br/>
-   <form action="/MailMetrics/subscribers/addSubscriber" method="get">  
-       <button class="btn btn-success">Add Email Templates</button>
-   </form>
-   <br/>
-   <br/>
+    <table>
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
 
-  <table>
-    <thead>
-      <tr>
-        <th>S.No.</th>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Age</th>
-        <th>Edit</th>
-        <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody>
-        <% let Sno=0; %>
-      <% for(subscriber of allsubscriber) { Sno=Sno+1;%>
-        <tr>
-          <td><%= Sno%></td>  
-          <td><%= subscriber._id %></td>
-          <td><%= subscriber.username %></td>
-          <td><%= subscriber.email %></td>
-          <td><%= subscriber.age %></td>
-          <td>
-            <form action="/MailMetrics/subscribers/<%=subscriber._id %>/update" method="get">
-                   <button><i class="fa-solid fa-pen-to-square"></i></button>
-             </form>
-          </td>
-          <td>
-            <form action="/MailMetrics/subscribers/<%=subscriber._id %>/delete" method="get">
-                   <button><i class="fa-solid fa-trash"></i></button>
-              </form>
-        </td>
-        </tr>
-      <% } %>
-    </tbody>
-  </table>
+           
+            <% if(allsubscriber.length===0) { %>
+                <tr>
+                <h3 class="no-campaign-message">You do not have any Subscribers!</h3>
+                </tr>
+                <% } else { %>
+
+                    <% let Sno=0; %>
+            <% for(subscriber of allsubscriber) { Sno=Sno+1;%>
+                <tr>
+                    <td><%= Sno%></td>
+                    <td><%= subscriber._id %></td>
+                    <td><%= subscriber.username %></td>
+                    <td><%= subscriber.email %></td>
+                    <td><%= subscriber.age %></td>
+                    <td>
+                        <form action="/MailMetrics/subscribers/<%=subscriber._id %>/update" method="get">
+                            <button><i class="fa-solid fa-pen-to-square"></i></button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/MailMetrics/subscribers/<%=subscriber._id %>/delete" method="get" onsubmit="return confirmDelete('<%= subscriber._id %>')">
+                            <button><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script>
+        function confirmDelete(subscriberId) {
+            // Display a confirmation popup
+            var result = confirm("Are you sure you want to delete this Subscriber? If you proceed, all contribution data related to this Subscriber will also be deleted.");
+
+            if (!result) {
+                // If user cancels, return false to prevent form submission
+                console.log("Deletion canceled.");
+                return false;
+            } else {
+                // If user confirms, proceed with deletion
+                console.log("Item with ID " + subscriberId + " deleted successfully.");
+                // You can also make an AJAX request to delete the item from the server
+                // After deletion, you can perform any additional actions, such as updating the UI
+                return true; // Allow form submission
+            }
+        }
+    </script>
 </body>
