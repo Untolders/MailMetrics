@@ -1,6 +1,7 @@
 const User =require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const {transporter, generateOTP} = require("../utils/verificationMail.js");
+const {getHtml} = require("../utils/emailHTML.js");
 const VerificationToken = require("../models/verificationToken.js");
 
 //signup form
@@ -34,7 +35,7 @@ module.exports.userSignup = async (req, res, next) => {
             from: process.env.MAILMETRICS_MAIL,
             to: email,
             subject: `Verification of Email`,
-            html: `OTP: ${OTP}`
+            html: getHtml(OTP)
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -113,7 +114,7 @@ module.exports.emailVerificationForm = async (req, res, next) => {
             from: process.env.MAILMETRICS_MAIL,
             to: newUser.email,
             subject: `Verification of Email`,
-            html: `OTP: ${OTP}`
+            html: getHtml(OTP)
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
