@@ -144,13 +144,15 @@ To run this project on your local machine, follow these steps:
 
    ```plaintext
    ATLASDB_URL=<mongodb-url>
-   SENDER_MAIL=<gmail from which you send emails>
-   SENDER_MAIL_PASSWORD=<app password for SENDER_MAIL from two-step security of google account>
    SECRET=<Secret-string>
    DOMAIN=<Domain name e.g:http://localhost:8000>
    MAILMETRICS_MAIL=<your gmail used for sending otp>
    MAILMETRICS_PASSWORD=<app password by two-step verification of google account>
    ```
+
+
+How to get app password of your gmail : <br/> <a href="https://support.google.com/mail/answer/185833?hl=en#" target="_blank">Document Link</a>     
+        <a href="https://www.youtube.com/watch?v=rqPmaDxigNY" target="_blank"> Video Link</a></p>
 
 5. Start the development by command: ` node app.js `
 
@@ -159,20 +161,28 @@ To run this project on your local machine, follow these steps:
 
 - Users can sign up and log in to their account.
 - Users can save mail, subscribers, and templates.
+- User can add multiple sender email.
+- User can select sender email from which they want to send email.
 - Users can select a subscriber and choose a custom message or template to send.
 - Users can view the details of sent mails in the sent section.
 - User can Analyse Each Campaign with proper tracking of views and Clicks
 - User can Manage Campaigns, Templates and Subscribers by creating, updating and deleting. 
+
+How to get app password of your gmail : <br/> <a href="https://support.google.com/mail/answer/185833?hl=en#" target="_blank">Document Link</a>     
+        <a href="https://www.youtube.com/watch?v=rqPmaDxigNY" target="_blank"> Video Link</a></p>
+
 
 ## Usage
 
 To use the application, follow these steps:
 
 - Sign up and log in to your account.
+- Verify your email by OTP.
+- Add sender Email by entering email address and app Password of google account.
 - Add Subscriber by entering name, email and age of subscriber.
 - Create a email template by entering a title, subject, body of mail and sender name.
 - To send a mail, select template from template section and click on Send.
-- Then select subscribe and send mail
+- Then select subscribe, sender mail and then send email.
 - After sending the mail, you can track Campaign by going to campaign section and select the particular campaign.
 - Now you can track sent mail, views and clicks of capmaign and you can filter it by Date, Month and Year.
 - You can also track - sent, views and click of each subscriber of any particular campaign.
