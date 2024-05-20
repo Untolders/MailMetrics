@@ -129,3 +129,53 @@ https://github.com/Untolders/MailMetrics/assets/131255604/efd575f2-29a6-4995-9e9
 
 
 [Demo Video Link](https://youtu.be/nHf7q36SEU4)
+
+
+
+
+## Project Setup
+
+To run this project on your local machine, follow these steps:
+
+1. Clone the repository using `git clone https://github.com/Untolders/MailMetrics`
+2. Navigate to the project directory using `cd MailMetrics`
+3. Install dependencies using `npm install`
+4. Create a `.env` file in the root directory and add the following variables:
+
+   ```plaintext
+   ATLASDB_URL=<mongodb-url>
+   SENDER_MAIL=<gmail from which you send emails>
+   SENDER_MAIL_PASSWORD=<app password for SENDER_MAIL from two-step security of google account>
+   SECRET=<Secret-string>
+   DOMAIN=<Domain name e.g:http://localhost:8000>
+   MAILMETRICS_MAIL=<your gmail used for sending otp>
+   MAILMETRICS_PASSWORD=<app password by two-step verification of google account>
+   ```
+
+5. Start the development by command: ` node app.js `
+
+
+## Features
+
+- Users can sign up and log in to their account.
+- Users can save mail, subscribers, and templates.
+- Users can select a subscriber and choose a custom message or template to send.
+- Users can view the details of sent mails in the sent section.
+- User can Analyse Each Campaign with proper tracking of views and Clicks
+- User can Manage Campaigns, Templates and Subscribers by creating, updating and deleting. 
+
+## Usage
+
+To use the application, follow these steps:
+
+- Sign up and log in to your account.
+- Add Subscriber by entering name, email and age of subscriber.
+- Create a email template by entering a title, subject, body of mail and sender name.
+- To send a mail, select template from template section and click on Send.
+- Then select subscribe and send mail
+- After sending the mail, you can track Campaign by going to campaign section and select the particular campaign.
+- Now you can track sent mail, views and clicks of capmaign and you can filter it by Date, Month and Year.
+- You can also track - sent, views and click of each subscriber of any particular campaign.
+
+
+
