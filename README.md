@@ -151,8 +151,8 @@ To run this project on your local machine, follow these steps:
    ```
 
 
-How to get app password of your gmail : <br/> <a href="https://support.google.com/mail/answer/185833?hl=en#" target="_blank">Document Link</a>
-<a href="https://www.youtube.com/watch?v=rqPmaDxigNY" target="_blank">Video Link</a></p>
+How to get app password of your gmail : <br/> <a href="https://support.google.com/mail/answer/185833?hl=en#" target="_blank">Document Link</a>     
+        <a href="https://www.youtube.com/watch?v=rqPmaDxigNY" target="_blank"> Video Link</a></p>
 
 5. Start the development by command: ` node app.js `
 
@@ -167,6 +167,10 @@ How to get app password of your gmail : <br/> <a href="https://support.google.co
 - Users can view the details of sent mails in the sent section.
 - User can Analyse Each Campaign with proper tracking of views and Clicks
 - User can Manage Campaigns, Templates and Subscribers by creating, updating and deleting. 
+
+How to get app password of your gmail : <br/> <a href="https://support.google.com/mail/answer/185833?hl=en#" target="_blank">Document Link</a>     
+        <a href="https://www.youtube.com/watch?v=rqPmaDxigNY" target="_blank"> Video Link</a></p>
+
 
 ## Usage
 
