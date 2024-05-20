@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const senderEmail = require("./senderEmail");
 const Schema = mongoose.Schema;
 
 
@@ -34,6 +35,10 @@ const campaignSchema = new Schema({
                 default: () => new Date()
             }
         }],
+    },
+    senderEmail:{
+        type: Schema.Types.ObjectId,
+                ref: "SenderEmail"
     },
     sendAt: [{
         type: Date,

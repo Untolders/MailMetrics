@@ -24,6 +24,7 @@ router.post("/:id/sendEmail" ,
 isLoggedIn,
 isVerified,
 isEmailOwner,
+validateCampaign,
 wrapAsync(campaignController.sendEmail));
 
 

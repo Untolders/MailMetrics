@@ -3,6 +3,9 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const {transporter, generateOTP} = require("../utils/verificationMail.js");
 const {getHtml} = require("../utils/emailHTML.js");
 const VerificationToken = require("../models/verificationToken.js");
+const {createUserTransporter} = require('../utils/mail.js');
+const SenderEmail = require("../models/senderEmail.js");
+const utils = require('util');
 
 //signup form
 module.exports.userSignupForm = (req,res)=>{
@@ -94,12 +97,10 @@ module.exports.emailVerificationForm = async (req, res, next) => {
     try {
       const { id } = req.body;
         const OTP = await generateOTP();
-        console.log("b:",req.body);
-        console.log("id:",id);
-         
+       
         const newUser= await User.findById(id);
 
-        console.log("user:",newUser);
+       
        await VerificationToken.findOneAndDelete({owner:id});
         const newToken = new VerificationToken({
             owner: newUser._id,
@@ -165,3 +166,71 @@ module.exports.userLogin = async(req,res)=>{
     });
 
 };
+
+
+
+//senderEmail Form
+module.exports.senderEmailForm = (req,res)=>{
+    
+    res.render("users/addSenderEmail.ejs");
+
+};
+
+
+
+//addSenderEmail 
+module.exports.addSenderEmail = async (req, res) => {
+    try {
+      const email = req.body.email;
+      const password = req.body.appPassword;
+  
+      const userTransporter = createUserTransporter(email, password);
+  
+      const sendMailAsync = utils.promisify(userTransporter.sendMail).bind(userTransporter);
+  
+      const mailOptions = {
+        from: email,
+        to: email,
+        subject: `Adding Sender Email`,
+        html: `<h3>Successfully added the Mail as the Sender Email</h3>`
+      };
+  
+      await sendMailAsync(mailOptions);
+  
+      const newSenderEmail = new SenderEmail(req.body);
+      newSenderEmail.owner = req.user._id;
+      await newSenderEmail.save();
+  
+      req.flash("success", "Sender Email successfully added!");
+      let redirectUrl = (res.locals.redirectUrl || "/MailMetrics/email");
+      res.redirect(redirectUrl);
+    } catch (error) {
+      console.log("error :",error.message);
+      req.flash("error", "Invalid Email or Password!");
+      res.render("users/addSenderEmail.ejs");
+    }
+  };
+
+
+
+
+  module.exports.destroySenderEmail = async(req,res,next)=>{
+
+    let {id} =req.params;
+  
+    await SenderEmail.findByIdAndDelete(id);
+    const allSenderEmail = await SenderEmail.find({});
+    console.log("deleted successfully");
+    req.flash("success","subscriber Deleted!");
+    res.render("users/senderEmail.ejs",{allSenderEmail});
+  
+  };
+  
+
+  module.exports.renderSenderEmail = async(req,res,next)=>{
+
+    const allSenderEmail = await SenderEmail.find({});
+  
+    res.render("users/senderEmail.ejs",{allSenderEmail});
+  
+  };

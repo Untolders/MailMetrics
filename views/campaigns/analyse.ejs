@@ -23,7 +23,7 @@
 </script>
 
 <body> 
-    <div style="display: flex; justify-content: space-between;">
+    <div style="display:flex; justify-content:space-between;">
         <div>
             <h2>Campaign Data:</h2>
             <div style="width: 800px; height: 400px;">
@@ -33,11 +33,11 @@
         </div>
         <br/>
         <br/>
-        
-            <div style="display: flex; justify-content: space-between; flex-direction: column;" >
+       
+            <div style="display: flex; justify-content: space-between; flex-direction: column; margin-left: 10%;" >
                 <br/>
         <br/>
-        <div>
+        <div >
             <% let token; %>
           <form method="get" action="/MailMetrics/campaigns/analyseByDate/<%= campaign._id %>">
     <%  token=  new Date().getFullYear()+`-`+(new Date().getMonth() + 1).toString().padStart(2, '0') +`-`+ new Date().getDate().toString().padStart(2, '0') ; %>
@@ -59,25 +59,25 @@
                         <input type="hidden" name="token" value="<%= token %>">
                         <button class="btn btn-dark">Yesterday Data</button>
                     </form>
-                </div>
+                </div><br/>
                 <div>
                     <form method="get" action="/MailMetrics/campaigns/analyseByDate/<%= campaign._id %>">
                         <label for="customDate">Select a Date:</label>
-                        <input type="date" id="token" name="token">
+                        <input type="date" id="token" name="token"><br/>
                         <button type="submit" class="btn btn-dark">Analyse</button>
                     </form>
-                </div>
+                </div><br/>
                 <div>
                     <form method="get" action="/MailMetrics/campaigns/analyseByDateInMonth/<%= campaign._id %>">
                         <label for="customMonth">Select a Month:</label>
-                        <input type="month" id="token" name="token">
+                        <input type="month" id="token" name="token"><br/>
                         <button type="submit" class="btn btn-dark">Analyse</button>
                     </form>
-                </div>
+                </div><br/>
                 <div>
                     <form method="get" action="/MailMetrics/campaigns/analyseByMonth/<%= campaign._id %>">
                         <label for="customYear">Select a Year:</label>
-                        <input type="number" id="token" name="token" min="1000" max="3000">
+                        <input type="number" id="token" name="token" min="1000" max="3000"><br/>
                         
                         <button type="submit" class="btn btn-dark">Analyse</button>
                     </form>

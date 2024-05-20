@@ -6,7 +6,9 @@ const {mailTransport} = require("../utils/mail.js");
 const Campaign = require("../models/campaign.js");
 const { campaignSchema }=require("../schema.js");
 const count = require("../utils/helper.js");
-
+const SenderEmail = require("../models/senderEmail.js");
+const {createUserTransporter} = require('../utils/mail.js');
+const senderEmail = require("../models/senderEmail.js");
 
 
 
@@ -31,18 +33,19 @@ module.exports.index = async (req, res, next) => {
 module.exports.renderSendEmail = async (req,res,next)=>{
    
     let {id} =req.params;
-    let allSubscribers = await Subscriber.find({});
+    let allSubscribers = await Subscriber.find({owner:req.user._id});
     const email = await Email.findById(id);
+    const allSenderEmail = await SenderEmail.find({owner:req.user._id});
     if(!email){
       req.flash("error","Not Exist!");
       res.redirect("/MailMetrics");
     }
   
-    res.render("campaigns/sendEmail.ejs",{email, allSubscribers});
+    res.render("campaigns/sendEmail.ejs",{email, allSubscribers, allSenderEmail});
   };
   
   module.exports.sendEmail = async (req, res, next) => {
-    console.log("send email");
+   
     let { id } = req.params;
 
     try {
@@ -71,8 +74,9 @@ module.exports.renderSendEmail = async (req,res,next)=>{
         }
 
         // Find the subscribers by ID
-        const receiversID = req.body.subscribers;
+        const receiversID = req.body.receiver;
         const receivers = [];
+        
 
         for (let receiverID of receiversID) {
             const receiver = await Subscriber.findById(receiverID);
@@ -98,37 +102,49 @@ module.exports.renderSendEmail = async (req,res,next)=>{
                 const newLink = `${myServerDomain}/${emailID}/${receiverId}?token=${originalLink}`;
                 return `<a href="${newLink}" ${p2}>${p3}</a>`;
             });
-            transformedBody = transformedBody + `<img alt="sorry" src='${process.env.DOMAIN.toString()}/MailMetrics/campaigns/open/${campaign._id.toString()}/${receiverId.toString()}/tracker.png' class="CToWUd" data-bit="iit"></img>`;
+            transformedBody = transformedBody + `<img alt="logo"  src='${process.env.DOMAIN.toString()}/MailMetrics/campaigns/open/${campaign._id.toString()}/${receiverId.toString()}/tracker.png' class="CToWUd" data-bit="iit"></img>`;
             return transformedBody;
         }
+
+        const senderEmail = await SenderEmail.findOne({ _id: req.body.senderEmail }); // Use findOne instead of find
+        
+        
+        const email = senderEmail.email;
+        const password = senderEmail.appPassword;
+        
+     
+        const userTransporter = createUserTransporter(email, password);
+
 
         // Send the email
         for (let receiver of receivers) {
             const unencodedEmailBody = transformLinks(emailBody, receiver._id, myServerDomain, id, false);
             var mailOptions = {
-                from: draftEmail.sender,
+                from: email,
                 to: receiver.email,
                 subject: draftEmail.subject,
                 html: unencodedEmailBody
             };
 
-            transporter.sendMail(mailOptions, function (error, info) {
+            userTransporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     console.log(error);
                 } else {
+                    
                     console.log('Email sent: ' + info.response);
                     req.flash("error", "");
                 }
             });
+            req.flash("success", "Email sent successfully!");
         }
-        req.flash("success", "Email sent successfully!");
-    
+      
+        campaign.senderEmail = senderEmail;
         for (let receiver of receivers) {
             campaign.receiver.push(receiver._id);
             await campaign.save();
         }
-
-        res.redirect("/MailMetrics");
+   
+        res.redirect("/MailMetrics/campaigns");
     } catch (error) {
         console.error("Error sending email:", error);
         req.flash("error", "Error sending email");
@@ -415,7 +431,7 @@ module.exports.analyseByMonth = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { token } = req.query;
-        console.log("token: ",token);
+        
 
         const campaign = await Campaign.findById(id).populate('receiver data.views.subscriber data.clicks.subscriber');
 
@@ -543,9 +559,8 @@ module.exports.open=async(req, res) => {
 
 
     const email = { id: campaign.emailId._id, to: 'recipient@example.com', subject: 'Test Email' };
-    console.log('Email was opened');
-    console.log(campaign.receiver);
-    console.log(email.subject);
+    
+    
 
   
  

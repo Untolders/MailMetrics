@@ -21,7 +21,7 @@
         <h3>New Campaign</h3>
         <form method="post" action="/MailMetrics/campaigns/<%= email.id %>/sendEmail" novalidate
           class="needs-validation">
-
+          <input type="hidden" name="emailId" id="emailId" value=<%= email._id%> required>
           <div class="mb-3">
 
             <label for="subject" class="form-label">Email Subject</label>
@@ -50,16 +50,36 @@
 
               <br />
 
+       <div>     
+          <h1>Sender Email List:</h1>
+         
+       <a class="btn btn-primary" href="/addSenderEmail">Add Sender Email</a>
+        <br/><br/>
+
+        <div class="mb-3">
+          <label for="senderEmail" class="form-label">Choose Sender Email:</label>
+          <% if(allSenderEmail.length === 0) { %>
+              <p class="no-campaign-message">You do not have any sender email. Please add one first!</p>
+          <% } else { %>
+              <select name="senderEmail" id="senderEmail" class="form-control" required>
+                  <option value="" disabled selected>Select Sender Email</option>
+                  <% for (let senderEmail of allSenderEmail) { %>
+                      <option value="<%= senderEmail._id %>"><%= senderEmail.email %></option>
+                  <% } %>
+              </select>
+          <% } %>
+          <div class="invalid-feedback">Please select a sender email.</div>
+      </div>
 
 
-              <div>
+      <div>
                
                 
                 <h1>Subscribers List</h1>
                 <br/>
                 <br/>
                 <div>
-                  <label for="receivers"><strong>Choose Subscribers: </strong></label> &nbsp;
+                  <label for="receiver"><strong>Choose Subscribers: </strong></label> &nbsp;
                   <input type="checkbox" id="selectAll">
                   <label for="selectAll">Select all</label>
                 </div>
@@ -75,7 +95,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% let Sno=0; %>
+                    <%  Sno=0; %>
                     <% for(subscriber of allSubscribers) { %>
                       <%Sno=Sno+1; %>
                       <tr>
@@ -83,7 +103,7 @@
                         <td><%= subscriber.username %></td>
                         <td><%= subscriber.email %></td>
                         <td><%= subscriber.age %></td>
-                        <td><input type="checkbox" name="subscribers[]" id="subscribers" value="<%= subscriber._id %>"></td>
+                        <td><input type="checkbox" name="receiver[]" id="receiver" value="<%= subscriber._id %>"></td>
                         
                       </tr>
                     <% } %>
@@ -136,7 +156,7 @@
     </script>
     <script>
       const selectAllCheckbox = document.querySelector('#selectAll');
-      const subscriberCheckboxes = document.querySelectorAll('input[name="subscribers[]"]');
+      const subscriberCheckboxes = document.querySelectorAll('input[name="receiver[]"]');
     
       selectAllCheckbox.addEventListener('change', (event) => {
         subscriberCheckboxes.forEach((checkbox) => {
@@ -150,6 +170,21 @@
         const selectedSubscribersInput = document.querySelector('#selectedSubscribers');
         selectedSubscribersInput.value = JSON.stringify(selectedSubscribers);
       });
+
+
+      document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+      const selectedReceivers = document.querySelectorAll('input[name="receiver[]"]:checked');
+      if (selectedReceivers.length === 0) {
+        event.preventDefault(); // Prevent form submission
+        alert('Please select at least one receiver.');
+      }
+    });
+  });
+
+     
+   
     </script>
 
   </body>

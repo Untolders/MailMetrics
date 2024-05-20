@@ -4,7 +4,7 @@ const ExpressError=require("./utils/ExpressError.js");
 const Campaign =require("./models/campaign.js");
 const Email = require("./models/email.js");
 const Subscriber = require("./models/subscriber.js");
-const { campaignSchema,emailValidationSchema, subscriberValidationSchema }=require("./schema.js");
+const { campaignSchema,emailValidationSchema, subscriberValidationSchema, senderEmailValidationSchema }=require("./schema.js");
 const { email } = require("./controllers/email.js");
 
 
@@ -157,6 +157,24 @@ module.exports.validateSubscriber = (req, res, next) => {
     res.redirect("/MailMetrics/subscribers");
   }
 };
+
+module.exports.validateSenderEmail = (req, res, next) => {
+  try {
+    const { error } = senderEmailValidationSchema.validate(req.body);
+    if (error) {
+      let errmsg = error.details.map((el) => el.message).join(",");
+      console.log("Validation Error:", errmsg);
+      // Handle validation error here
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.error("Error in Validation middleware:", error);
+    req.flash("error", "Validation error: ",error.message);
+    res.redirect("/addSenderEmail");
+  }
+};
+
 
 
 
