@@ -135,8 +135,9 @@ module.exports.renderSendEmail = async (req,res,next)=>{
                     req.flash("error", "");
                 }
             });
-            req.flash("success", "Email sent successfully!");
+           
         }
+        req.flash("success", "Email sent successfully!");
       
         campaign.senderEmail = senderEmail;
         for (let receiver of receivers) {
