@@ -1,5 +1,5 @@
 const Subscriber =require("../models/subscriber.js");
-const { subscriberSchema }=require("../schema.js");
+
 
 
 
@@ -44,10 +44,11 @@ module.exports.renderNewForm =(req,res)=>{
     req.flash("success", "Successfully subscribed!");
     res.redirect("/MailMetrics/subscribers");
 } catch (err) {
-    if (err.name === 'MongoError' && err.code === 11000 && err.keyPattern && err.keyPattern.email) {
+    if (err.name === 'MongoServerError' && err.code === 11000 && err.keyPattern && err.keyPattern.email) {
         req.flash("error", "You have already the subscriber with this email.");
     } else {
         req.flash("error", err.message);
+      
     }
     res.redirect("/MailMetrics/subscribers");
 }

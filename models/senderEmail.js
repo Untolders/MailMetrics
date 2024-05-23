@@ -12,12 +12,18 @@ const senderEmailSchema = new Schema({
         type: String,
         required: true,
     },
-    appPassword:{
-        type:String,
-        required:true,
+    appPassword: {
+        type: String,
+        required: true,
+    },
+    salt: {
+        type: String,
+        required: true,
     }
 });
 
 senderEmailSchema.index({ owner: 1, email: 1 }, { unique: true });
+
+
 
 module.exports = mongoose.model("SenderEmail", senderEmailSchema);

@@ -5,7 +5,7 @@ const passport = require("passport");
 const {saveRedirectUrl} = require("../middleware.js");
 const userController = require("../controllers/users.js");
 
-const {isVerified , validateSenderEmail} = require("../middleware.js");
+const {isVerified ,isLoggedIn, validateSenderEmail} = require("../middleware.js");
 
 //signup form
 router.route("/signup")
@@ -21,9 +21,9 @@ router.route("/signup/emailVerification")
 
 
 //user email verification
-.post( wrapAsync(userController.emailVerification));
+.post( isLoggedIn,wrapAsync(userController.emailVerification));
 router.route("/signup/emailVerificationForm")
-.post(userController.emailVerificationForm)
+.post(isLoggedIn,userController.emailVerificationForm)
 
 //login form
 router.route("/login")
@@ -39,16 +39,16 @@ passport.authenticate('local',
 );
 
 router.route("/senderEmail")
-  .get(userController.renderSenderEmail)
+  .get(isLoggedIn,userController.renderSenderEmail)
 
 // Add Sender Email routes
 router.route("/addSenderEmail")
-  .get(userController.senderEmailForm)
-  .post(validateSenderEmail,wrapAsync(userController.addSenderEmail));
+  .get(isLoggedIn,userController.senderEmailForm)
+  .post(isLoggedIn,validateSenderEmail,wrapAsync(userController.addSenderEmail));
 
 //senderEmail Delete
 router.route("/deleteSenderEmail/:id")
-  .get(userController.destroySenderEmail)
+  .get(isLoggedIn,userController.destroySenderEmail)
 //user logout
 router.get("/logout",userController.userLogout);
 

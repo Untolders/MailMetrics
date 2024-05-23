@@ -1,190 +1,181 @@
-<% layout('/layouts/boilerplate')%>
-  <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+<% layout('/layouts/boilerplate')%> 
+
+<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
 <style>
+     .table-container {
+        overflow-x: auto;
+    }
+
     table {
-      width: 100%;
-      border-collapse: collapse;
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    th, td {
-      padding: 8px 12px;
-      border: 1px solid #ddd;
+
+    th,
+    td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        text-align: left;
     }
+
     th {
-      background-color: #f4f4f4;
+        background-color: #ececec !important;
+        color: white;
     }
-  </style>
-  <body>
-    <div class="row">
-      <div class="col-8 offset-2">
-        </br>
-        </br>
-        <h3>New Campaign</h3>
-        <form method="post" action="/MailMetrics/campaigns/<%= email.id %>/sendEmail" novalidate
-          class="needs-validation">
-          <input type="hidden" name="emailId" id="emailId" value=<%= email._id%> required>
-          <div class="mb-3">
 
-            <label for="subject" class="form-label">Email Subject</label>
-            <p name="subject">
-              <%= email.subject%>
-            </p>
-
-          </div>
-          <div class="mb-3">
-            <label for="body" class="form-label">Body of Mail</label>
-            <textarea name="body" id="body" cols="30" rows="10" placeholder="Write body of mail here"
-              class="form-control" disabled><%= email.body%></textarea>
-
-
-          </div>
-
-          <div class="mb-3">
-
-            <label for="sender" class="form-label">sender</label>
-            <p name="sender">
-              <%= email.sender%>
-            </p>
-
-            <div class="mb-3">
-
-
-              <br />
-
-       <div>     
-          <h1>Sender Email List:</h1>
-         
-       <a class="btn btn-primary" href="/addSenderEmail">Add Sender Email</a>
-        <br/><br/>
-
-        <div class="mb-3">
-          <label for="senderEmail" class="form-label">Choose Sender Email:</label>
-          <% if(allSenderEmail.length === 0) { %>
-              <p class="no-campaign-message">You do not have any sender email. Please add one first!</p>
-          <% } else { %>
-              <select name="senderEmail" id="senderEmail" class="form-control" required>
-                  <option value="" disabled selected>Select Sender Email</option>
-                  <% for (let senderEmail of allSenderEmail) { %>
-                      <option value="<%= senderEmail._id %>"><%= senderEmail.email %></option>
-                  <% } %>
-              </select>
-          <% } %>
-          <div class="invalid-feedback">Please select a sender email.</div>
-      </div>
-
-
-      <div>
-               
-                
-                <h1>Subscribers List</h1>
-                <br/>
-                <br/>
-                <div>
-                  <label for="receiver"><strong>Choose Subscribers: </strong></label> &nbsp;
-                  <input type="checkbox" id="selectAll">
-                  <label for="selectAll">Select all</label>
-                </div>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>S.No.</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Age</th>
-                      <th>Select</th>
-                      
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <%  Sno=0; %>
-                    <% for(subscriber of allSubscribers) { %>
-                      <%Sno=Sno+1; %>
-                      <tr>
-                        <td><%= Sno %></td>
-                        <td><%= subscriber.username %></td>
-                        <td><%= subscriber.email %></td>
-                        <td><%= subscriber.age %></td>
-                        <td><input type="checkbox" name="receiver[]" id="receiver" value="<%= subscriber._id %>"></td>
-                        
-                      </tr>
-                    <% } %>
-                  </tbody>
-                </table>
-      
-                <div class="invalid-feedback">
-                  sender should be valid.
-                </div>
-              </div>
-              <br /> <br />
-              <button class="btn btn-dark">Send To Subscribers</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-    <script>
-      CKEDITOR.replace('body', {
-        // Add plugins
-        extraPlugins: 'image2,link,button,lineutils',
-        // Define toolbar
-        toolbar: [
-          { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'] },
-          { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
-          { name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'] },
-          '/',
-          { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
-          { name: 'colors', items: ['TextColor', 'BGColor'] },
-          { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
-          { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
-          { name: 'links', items: ['Link', 'Unlink'] },
-          { name: 'insert', items: ['Button', 'Line'] },
-          { name: 'headings', items: ['Heading', 'Font', 'FontSize'] }
-        ],
-        // Configure button parameters
-        button: {
-          items: [
-            'Button', 'Link'
-          ]
-        },
-        // Configure line parameters
-        line: {
-          breakBeforeOpen: true,
-          breakAfterOpen: false,
-          breakBeforeClose: false,
-          breakAfterClose: true
+    .no-campaign-message {
+        color: red;
+    }
+    @media (max-width: 768px) {
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
         }
-      });
-    </script>
-    <script>
-      const selectAllCheckbox = document.querySelector('#selectAll');
-      const subscriberCheckboxes = document.querySelectorAll('input[name="receiver[]"]');
-    
-      selectAllCheckbox.addEventListener('change', (event) => {
-        subscriberCheckboxes.forEach((checkbox) => {
-          checkbox.checked = event.target.checked;
-        });
-    
-        const selectedSubscribers = Array.from(subscriberCheckboxes)
-          .filter((checkbox) => checkbox.checked)
-          .map((checkbox) => checkbox.value);
-    
-        const selectedSubscribersInput = document.querySelector('#selectedSubscribers');
-        selectedSubscribersInput.value = JSON.stringify(selectedSubscribers);
-      });
+        .form-control {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+     
+        .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="row">
+    <div class="col-12 col-md-8 offset-md-2">
+        <br><br>
+        <h3>New Campaign</h3>
+        <form method="post" action="/MailMetrics/campaigns/<%= email.id %>/sendEmail" novalidate class="needs-validation">
+            <input type="hidden" name="emailId" id="emailId" value="<%= email._id %>" required>
+            <div class="form-group">
+                <label for="subject" class="form-label">Email Subject</label>
+                <p name="subject"><%= email.subject %></p>
+            </div>
+            <div class="form-group">
+                <label for="body" class="form-label">Body of Mail</label>
+                <textarea name="body" id="body" cols="30" rows="10" placeholder="Write body of mail here" class="form-control" disabled><%= email.body %></textarea>
+            </div>
+            <div class="form-group">
+                <label for="sender" class="form-label">Sender</label>
+                <p name="sender"><%= email.sender %></p>
+            </div>
+            <div class="form-group">
+                <h1>Sender Email List:</h1>
+                <a class="btn btn-primary" href="/addSenderEmail">Add Sender Email</a>
+                <br><br>
+                <label for="senderEmail" class="form-label">Choose Sender Email:</label>
+                <% if(allSenderEmail.length === 0) { %>
+                    <p class="no-campaign-message">You do not have any sender email. Please add one first!</p>
+                <% } else { %>
+                    <select name="senderEmail" id="senderEmail" class="form-control" required>
+                        <option value="" disabled selected>Select Sender Email</option>
+                        <% for (let senderEmail of allSenderEmail) { %>
+                            <option value="<%= senderEmail._id %>"><%= senderEmail.email %></option>
+                        <% } %>
+                    </select>
+                <% } %>
+                <div class="invalid-feedback">Please select a sender email.</div>
+            </div>
+            <div>
+                <h1>Subscribers List</h1>
+                <br><br>
+                <div>
+                    <label for="receiver"><strong>Choose Subscribers: </strong></label> &nbsp;
+                    <input type="checkbox" id="selectAll">
+                    <label for="selectAll">Select all</label>
+                </div>
+                <div class="table-container">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Age</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%  Sno=0; %>
+                        <% for(subscriber of allSubscribers) { %>
+                            <% Sno=Sno+1; %>
+                            <tr>
+                                <td data-label="S.No."><%= Sno %></td>
+                                <td data-label="Name"><%= subscriber.username %></td>
+                                <td data-label="Email"><%= subscriber.email %></td>
+                                <td data-label="Age"><%= subscriber.age %></td>
+                                <td data-label="Select"><input type="checkbox" name="receiver[]" id="receiver" value="<%= subscriber._id %>"></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+                <div class="invalid-feedback">Sender should be valid.</div>
+            </div>
+            <br><br>
+            <button class="btn btn-dark">Send To Subscribers</button>
+        </form>
+    </div>
+</div>
+</div>
+<script>
+CKEDITOR.replace('body', {
+    // Add plugins
+    extraPlugins: 'image2,link,button,lineutils',
+    // Define toolbar
+    toolbar: [
+        { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'] },
+        { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+        { name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'] },
+        '/',
+        { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+        { name: 'colors', items: ['TextColor', 'BGColor'] },
+        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+        { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
+        { name: 'links', items: ['Link', 'Unlink'] },
+        { name: 'insert', items: ['Button', 'Line'] },
+        { name: 'headings', items: ['Heading', 'Font', 'FontSize'] }
+    ],
+    // Configure button parameters
+    button: {
+        items: [
+            'Button', 'Link'
+        ]
+    },
+    // Configure line parameters
+    line: {
+        breakBeforeOpen: true,
+        breakAfterOpen: false,
+        breakBeforeClose: false,
+        breakAfterClose: true
+    }
+});
+</script>
+<script>
+const selectAllCheckbox = document.querySelector('#selectAll');
+const subscriberCheckboxes = document.querySelectorAll('input[name="receiver[]"]');
 
+selectAllCheckbox.addEventListener('change', (event) => {
+    subscriberCheckboxes.forEach((checkbox) => {
+        checkbox.checked = event.target.checked;
+    });
+});
 
-      document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     form.addEventListener('submit', function(event) {
-      const selectedReceivers = document.querySelectorAll('input[name="receiver[]"]:checked');
-      if (selectedReceivers.length === 0) {
-        event.preventDefault(); // Prevent form submission
-        alert('Please select at least one receiver.');
-      }
+        const selectedReceivers = document.querySelectorAll('input[name="receiver[]"]:checked');
+        if (selectedReceivers.length === 0) {
+            event.preventDefault(); // Prevent form submission
+            alert('Please select at least one receiver.');
+        }
     });
-  });
-
-     
-   
-    </script>
-
-  </body>
+});
+</script>
+</body>

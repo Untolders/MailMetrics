@@ -1,47 +1,91 @@
 <% layout('/layouts/boilerplate')%>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+        color: #343a40;
+    }
+
+    .form-container {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+    }
+
+    .btn-success {
+        display: block;
+        width: 100%;
+    }
+
+    .info-links {
+        font-size: 0.9rem;
+        color: #007bff;
+    }
+
+    .info-links a {
+        color: #007bff;
+        text-decoration: underline;
+    }
+
+    .info-links a:hover {
+        text-decoration: none;
+    }
+</style>
+
 <body>
-    <div class="row mt-3">
-        <h1 class="col-6 offset-3">Add Sender Email</h1>
-        <div class="col-6 offset-3">
-        <form method="POST" action="/addSenderEmail" novalidate class="needs-validation">
-                <div class="mb-3">
-                  <label for="username" class="form-label">Sender Email</label>
-                  <input type="email" name="email" id="email" class="form-control" required>
-                  
-                  <div class="invalid-feedback">
-                    Sender Email is required!
-                  </div>
-                </div>
-
-                
-                
-                <div class="mb-3">
-                        <label for="appPassword" class="form-label">App password</label>
-                        <input type="password" name="appPassword" id="appPassword" class="form-control" required>
-                        <div class="invalid-feedback">
-                           App password is required!
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-12">
+                <h1>Add Sender Email</h1><hr/><br/>
+                <div class="form-container">
+                    <form method="POST" action="/addSenderEmail" novalidate class="needs-validation">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Sender Email</label>
+                            <input type="email" name="email" id="email" class="form-control" required>
+                            <div class="invalid-feedback">
+                                Sender Email is required!
+                            </div>
                         </div>
-                </div>
-                    
-              <div>
 
-                <div class="mb-3">
-                   <p>How to get app password of your gmail : <br/> <a href="https://support.google.com/mail/answer/185833?hl=en#" target="_blank">Document Link</a> &nbsp;&nbsp; <a href="https://www.youtube.com/watch?v=rqPmaDxigNY" target="_blank">Video Link</a></p>
-                   
-                   
+                        <div class="mb-3">
+                            <label for="appPassword" class="form-label">App Password</label>
+                            <input type="password" name="appPassword" id="appPassword" class="form-control" required>
+                            <div class="invalid-feedback">
+                                App password is required!
+                            </div>
+                        </div>
+
+                        <div class="mb-3 ">
+                            <p>How to get app password of your Gmail:</p>
+                            <p class="mb-3 info-links">
+                                <a href="https://support.google.com/mail/answer/185833?hl=en#" target="_blank">Document Link</a> &nbsp;&nbsp; 
+                                <a href="https://www.youtube.com/watch?v=rqPmaDxigNY" target="_blank">Video Link</a>
+                            </p>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-success mb-3">Add</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-                
-          <div>
-                <button class=" btn btn-success offset-3 col-6 mb-3">Add</button>
-              </div>
-              
-                
-                
-           
-         
-            </form>
         </div>
     </div>
-   
-   
 </body>

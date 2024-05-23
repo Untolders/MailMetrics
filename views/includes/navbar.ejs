@@ -1,32 +1,52 @@
-
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  
+  <nav class="navbar navbar-expand-lg  bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand" href="/MailMetrics"><i class="fa-regular fa-envelope" style="color: #308d46;"></i></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-        
-         <a class="nav-link" href="/MailMetrics">Explore</a>
-         <a class="nav-link" href="/senderEmail">SenderEmail</a>
-         
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav ">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+           <li class="nav-item">
+              <a class="nav-link" href="/MailMetrics"> Explore</a>
+           </li>
+           <li class="nav-item">
+              <a class="nav-link" href="/senderEmail"> SenderEmail</a>
+           </li>
+          </ul>
         </div>
+        
        
         <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/MailMetrics/campaigns">Campaign</a>
-          <a class="nav-link" href="/MailMetrics/email">Templates</a>
-          <a class="nav-link" href="/MailMetrics/subscribers">Subscriber</a>
-          
-          
-         <% if(typeof currUser == 'undefined' && !currUser){  %>
-          <a class="nav-link" href="/signup"><b>SignUp</b></a>
-          <a class="nav-link" href="/login"><b>Login</b></a>
-          <%   } %> 
-        <%  if(typeof currUser !== 'undefined' && currUser){ %>
-          <a class="nav-link" href="/logout"><b>Logout</b></a>
-         <% }%>  
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/MailMetrics/campaigns"> Campaign</a>
+            </li>
+              <li class="nav-item">
+              <a class="nav-link" href="/MailMetrics/email"> Templates</a>
+            </li>
+              <li class="nav-item">
+              <a class="nav-link" href="/MailMetrics/subscribers"> Subscriber</a>
+             </li>
+              
+             <% if(typeof currUser == 'undefined' && !currUser){  %>
+              <li class="nav-item">
+              <a class="nav-link " href="/signup"><button class=" btn btn-secondary"> Signup</button></a>
+              </li>
+              <li class="nav-item">
+              <a class="nav-link " href="/login"><button class=" btn btn-secondary"> Login</button></a>
+              </li>
+              <%   } %> 
+            <%  if(typeof currUser !== 'undefined' && currUser){ %>
+              <li class="nav-item">
+              <a class="nav-link bs-secondary-color" href="/logout"><button class=" btn btn-secondary"> Logout</button></a>
+              </li>
+              <% }%> 
+           </ul>
         </div>
+       
       </div>
     </div>
   </nav>
+

@@ -1,53 +1,137 @@
 <% layout('/layouts/boilerplate')%>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+  }
+  
+  .container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .form-label {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+
+  .invalid-feedback {
+    color: #dc3545;
+    margin-top: 5px;
+    font-size: 14px;
+  }
+
+  .btn-success {
+    width: 100%;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+  }
+
+  .btn-dark {
+    width: 100%;
+    background-color: #343a40;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+  }
+
+  .btn-dark:hover {
+    background-color: #23272b;
+  }
+
+  .centered-label {
+    text-align: center;
+    font-size: 1rem;
+    color: #6c757d;
+  }
+
+  .form-container {
+    margin-top: 3rem;
+  }
+</style>
 <body>
-    <div class="row mb-3 mt-3">
-        <div class="col-6 offset-3">
+  <div >
+    <h1>Signup</h1><hr/><br/>
+    <form method="POST" action="/signup/emailVerification" novalidate class="needs-validation">
+      <input type="hidden" name="id" id="id" class="form-control" value="<%= newUser._id %>" required>
       
-            <h3>Signup for Wonderlust</h3>
-            <form method="POST" action="/signup/emailVerification" novalidate class="needs-validation">
-                
-                <input type="hidden" name="id" id="id" class="form-control" value="<%= newUser._id %>" required>
- 
-               
-                <div class="mb-3">
-                  <label for="username" class="form-label">Username</label>
-                  <input type="text" name="username" id="username" class="form-control" value=<%= newUser.username %> required disabled>
-                  
-                  <div class="invalid-feedback">
-                    username is required!
-                  </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" id="email"  class="form-control" value=<%= newUser.email %> required disabled>
-                     <div class="invalid-feedback">
-                        Email should be valid.
-                    </div>
-                </div>
-              
-                
-                
-
-                <div class="mb-3">
-                    <label for="otp" class="form-label">OTP</label>
-                    <input type="string" name="otp" id="otp" class="form-control" required>
-                    <div class="invalid-feedback">
-                        OTP is required!
-                    </div>
-            </div>
-                    
-              <div>
-                <button class=" btn btn-success offset-3 col-6 mb-3">Signup</button>
-              </div>
-              
-                
-                
-           
-         
-            </form>
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" name="username" id="username" class="form-control" value="<%= newUser.username %>" required disabled>
+        <div class="invalid-feedback">
+          Username is required!
         </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" name="email" id="email" class="form-control" value="<%= newUser.email %>" required disabled>
+        <div class="invalid-feedback">
+          Email should be valid.
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="otp" class="form-label">OTP</label>
+        <input type="text" name="otp" id="otp" class="form-control" required>
+        <div class="invalid-feedback">
+          OTP is required!
+        </div>
+      </div>
+          
+      <div>
+        <button class="btn btn-success" type="submit">Signup</button>
+      </div>
+    </form>
+
+    <div class="container mt-3">
+      <div class="row">
+        <div class="col-12">
+          <label class="centered-label d-block text-secondary">Already have an account?</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <a href="/login" class="btn btn-dark">Login</a>
+        </div>
+      </div>
     </div>
-   
-   
+  </div>
 </body>

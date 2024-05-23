@@ -1,9 +1,7 @@
 const Campaign = require("../models/campaign.js");
 const Email =require("../models/email.js");
-const { emailSchema }=require("../schema.js");
-// const multer  = require('multer');
-// const {storage} = require("../cloudConfig.js");
-// const upload = multer({ storage });
+
+
 
 
 // index 

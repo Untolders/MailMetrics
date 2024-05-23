@@ -1,14 +1,11 @@
 const Email =require("../models/email.js");
 
 const Subscriber =require("../models/subscriber.js");
-
-const {mailTransport} = require("../utils/mail.js");
 const Campaign = require("../models/campaign.js");
-const { campaignSchema }=require("../schema.js");
 const count = require("../utils/helper.js");
 const SenderEmail = require("../models/senderEmail.js");
 const {createUserTransporter} = require('../utils/mail.js');
-const senderEmail = require("../models/senderEmail.js");
+const { decryptToken} = require("../utils/hash.js");
 
 
 
@@ -102,7 +99,7 @@ module.exports.renderSendEmail = async (req,res,next)=>{
                 const newLink = `${myServerDomain}/${emailID}/${receiverId}?token=${originalLink}`;
                 return `<a href="${newLink}" ${p2}>${p3}</a>`;
             });
-            transformedBody = transformedBody + `<img alt="logo"  src='${process.env.DOMAIN.toString()}/MailMetrics/campaigns/open/${campaign._id.toString()}/${receiverId.toString()}/tracker.png' class="CToWUd" data-bit="iit"></img>`;
+            transformedBody = transformedBody + `<img alt="logo" style="display:none" src='${process.env.DOMAIN.toString()}/MailMetrics/campaigns/open/${campaign._id.toString()}/${receiverId.toString()}/tracker.png' class="CToWUd" data-bit="iit"></img>`;
             return transformedBody;
         }
 
@@ -110,9 +107,7 @@ module.exports.renderSendEmail = async (req,res,next)=>{
         
         
         const email = senderEmail.email;
-        const password = senderEmail.appPassword;
-        
-     
+        const password = decryptToken({iv:senderEmail.salt, encryptedData:senderEmail.appPassword});
         const userTransporter = createUserTransporter(email, password);
 
 
@@ -553,6 +548,7 @@ module.exports.open=async(req, res) => {
       
   
         await campaign.save();
+        
 
     }else {
         res.status(400).send("Bad Request: Missing token parameter");

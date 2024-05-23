@@ -1,11 +1,13 @@
 const User =require("../models/user.js");
-const wrapAsync = require("../utils/wrapAsync.js");
-const {transporter, generateOTP} = require("../utils/verificationMail.js");
+const {transporter} = require("../utils/verificationMail.js");
 const {getHtml} = require("../utils/emailHTML.js");
 const VerificationToken = require("../models/verificationToken.js");
 const {createUserTransporter} = require('../utils/mail.js');
 const SenderEmail = require("../models/senderEmail.js");
 const utils = require('util');
+const {encryptToken} = require("../utils/hash.js");
+
+
 
 //signup form
 module.exports.userSignupForm = (req,res)=>{
@@ -18,27 +20,24 @@ module.exports.userSignupForm = (req,res)=>{
 module.exports.userSignup = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
-        const OTP = await generateOTP();
+        
         const newUser = new User({
             username,
             email,
             
         });
 
-        const newToken = new VerificationToken({
-            owner: newUser._id,
-            token:OTP
-            
-        });
+        const {verificationToken, token} = await  VerificationToken.generateToken(newUser._id);
 
-        let user= await User.register(newUser,password);
-        await newToken.save();
+        await verificationToken.save();
+        await User.register(newUser,password);
+        // await newToken.save();
 
         var mailOptions = {
             from: process.env.MAILMETRICS_MAIL,
             to: email,
             subject: `Verification of Email`,
-            html: getHtml(OTP)
+            html: getHtml(token)
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -63,9 +62,9 @@ module.exports.emailVerification = async (req, res,next) => {
      
         
         
-        const verificationToken = await VerificationToken.findOne({ owner: id });
+        const verificationToken = await VerificationToken.verifyToken(id,otp);
        const newUser = await User.findById(id);
-        if (!verificationToken || verificationToken.token !== otp) {
+        if (!verificationToken || verificationToken ===false) {
             req.flash("error", "Invalid OTP. Please try again.");
             return res.render("users/emailVerification.ejs", { newUser });
         }
@@ -96,26 +95,24 @@ module.exports.emailVerification = async (req, res,next) => {
 module.exports.emailVerificationForm = async (req, res, next) => {
     try {
       const { id } = req.body;
-        const OTP = await generateOTP();
+     
        
         const newUser= await User.findById(id);
 
        
        await VerificationToken.findOneAndDelete({owner:id});
-        const newToken = new VerificationToken({
-            owner: newUser._id,
-            token:OTP
-            
-        });
+
+         const {verificationToken, token} = await VerificationToken.generateToken(req.user._id);
+
 
       
-        await newToken.save();
+        await verificationToken.save();
 
         var mailOptions = {
             from: process.env.MAILMETRICS_MAIL,
             to: newUser.email,
             subject: `Verification of Email`,
-            html: getHtml(OTP)
+            html: getHtml(token)
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -196,10 +193,21 @@ module.exports.addSenderEmail = async (req, res) => {
       };
   
       await sendMailAsync(mailOptions);
-  
-      const newSenderEmail = new SenderEmail(req.body);
-      newSenderEmail.owner = req.user._id;
+      
+      
+
+      // Hash the appPassword with the salt
+      const { iv, encryptedData}= encryptToken(password);
+
+      const newSenderEmail = new SenderEmail({
+          owner: req.user._id,
+          email: email,
+          appPassword: encryptedData,
+          salt: iv
+      });
+
       await newSenderEmail.save();
+
   
       req.flash("success", "Sender Email successfully added!");
       let redirectUrl = (res.locals.redirectUrl || "/MailMetrics/email");
@@ -229,7 +237,7 @@ module.exports.addSenderEmail = async (req, res) => {
 
   module.exports.renderSenderEmail = async(req,res,next)=>{
 
-    const allSenderEmail = await SenderEmail.find({});
+    const allSenderEmail = await SenderEmail.find({owner:req.user._id});
   
     res.render("users/senderEmail.ejs",{allSenderEmail});
   
