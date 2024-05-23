@@ -21,7 +21,7 @@ router.route("/signup/emailVerification")
 
 
 //user email verification
-.post( isLoggedIn,wrapAsync(userController.emailVerification));
+.post(wrapAsync(userController.emailVerification));
 router.route("/signup/emailVerificationForm")
 .post(isLoggedIn,userController.emailVerificationForm)
 
