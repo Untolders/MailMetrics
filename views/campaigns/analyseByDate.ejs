@@ -1,9 +1,30 @@
 <% layout('/layouts/boilerplate') %>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    /* CSS to make the chart container responsive and formal */
+    .chart-container {
+        position: relative;
+        width: 80%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        border-radius: 8px;
+    }
+
+    canvas {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+ 
+</style>
 <body>
-    <div style="width: 800px; height: 400px;">
+    <div class="chart-container">
         <!-- Canvas to render the chart -->
-        <canvas id="myChart" width="800" height="400"></canvas>
+        <canvas id="myChart"></canvas>
     </div>
     <!-- Script to render the chart -->
     <script>
@@ -17,15 +38,43 @@
                     datasets: data.datasets
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
-                        x:{
-                        autoSkip: true,
-                        maxRotation: 90,
-                        minRotation: 90
-                    }
-                ,
+                        x: {
+                            autoSkip: true,
+                            maxRotation: 90,
+                            minRotation: 90
+                        },
                         y: {
                             beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#333',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                            titleFont: {
+                                size: 16,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 14
+                            },
+                            footerFont: {
+                                size: 12
+                            },
+                            cornerRadius: 4
                         }
                     }
                 }

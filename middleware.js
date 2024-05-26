@@ -1,6 +1,6 @@
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
-
+const mongoose = require('mongoose');
 const Campaign =require("./models/campaign.js");
 const Email = require("./models/email.js");
 const Subscriber = require("./models/subscriber.js");
@@ -11,6 +11,8 @@ const { email } = require("./controllers/email.js");
 
 
 
+// Helper function to validate ObjectId
+const validateObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 module.exports.isLoggedIn =(req,res,next)=>{
 
@@ -35,32 +37,40 @@ module.exports.saveRedirectUrl=(req,res,next)=>{
 };
 
 //middleware for validate owner
-module.exports.isCampaignOwner= async(req,res,next)=>{
- try{
-  let {id}=req.params;
-  
-  
-  let campaign= await Campaign.findById(id);
- 
+module.exports.isCampaignOwner = async (req, res, next) => {
+    const { id } = req.params;
+   
 
-  if(!res.locals.currUser._id.equals(campaign.owner._id)){
-         req.flash("error","You are Owner for this Campaign !");
-         return res.redirect(`/MailMetrics/campaigns`);
-  }
+    if (!validateObjectId(id)) {
+        req.flash('error', 'Invalid Campaign ID');
+        return res.redirect('/MailMetrics/campaigns');
+    }
 
-  next();
-} catch (error) {
-  console.error("Error in isCampaignOwner middleware:", error);
-  req.flash("error", "An error occurred while checking ownership!");
-  return res.redirect(`/MailMetrics/campaigns`);
-}
+    try {
+        const campaign = await Campaign.findById(id);
+        if (!campaign) {
+            req.flash('error', 'Campaign not found');
+            return res.redirect('/MailMetrics/campaigns');
+        }
+
+        if (!res.locals.currUser._id.equals(campaign.owner._id)) {
+            req.flash('error', 'You are not the owner of this campaign!');
+            return res.redirect('/MailMetrics/campaigns');
+        }
+
+        next();
+    } catch (error) {
+        console.error('Error in isCampaignOwner middleware:', error);
+        req.flash('error', 'An error occurred while checking ownership!');
+        return res.redirect('/MailMetrics/campaigns');
+    }
 };
 
 //middleware for validate review Author
 module.exports.isEmailOwner= async(req,res,next)=>{
   try{
   let {id}=req.params;
-  
+
   
   let email = await Email.findById(id);
 
