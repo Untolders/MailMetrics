@@ -115,7 +115,7 @@ module.exports.renderSendEmail = async (req,res,next)=>{
         for (let receiver of receivers) {
             const unencodedEmailBody = transformLinks(emailBody, receiver._id, myServerDomain, id, false);
             var mailOptions = {
-                from: email,
+                from: `"${draftEmail.sender}"<${email}>`,
                 to: receiver.email,
                 subject: draftEmail.subject,
                 html: unencodedEmailBody
