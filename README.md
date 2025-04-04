@@ -178,6 +178,7 @@ To use the application, follow these steps:
 
 - Sign up and log in to your account.
 - Verify your email by OTP.
+- Use to get info from contact form.
 - Add sender Email by entering email address and app Password of google account.
 - Add Subscriber by entering name, email and age of subscriber.
 - Create a email template by entering a title, subject, body of mail and sender name.
