@@ -13,12 +13,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
 
 <body>
-    <header>
-        </header>
-
     <main>
-        <section id="welcome" class="text-center py-5">
-            <h1 class="animate__animated animate__fadeInDown">Welcome to MailMetrics <i class="fas fa-paper-plane animate__animated animate__pulse animate__infinite"></i></h1>
+        <section id="welcome">
+            <h1 class="animate__animated animate__fadeInDown">Welcome to MailMetrics <i class="fas fa-paper-plane"></i></h1>
             <p class="welcome-subtitle animate__animated animate__fadeInUp">
                 Unlock the full potential of your email campaigns with smart A/B testing.
                 <br> Elevate your open rates, click-throughs, and overall engagement like never before!
@@ -131,10 +128,13 @@
     <script>
         $(document).ready(function() {
             function initializeSlick(selector) {
-                if ($(selector).children().length > 1) { // Only initialize if there are items to slide
-                    $(selector).slick({
+                const slider = $(selector);
+                const slideCount = slider.find('.slider-item').length;
+
+                if (slideCount > 1) { // Only initialize if there's more than one item
+                    slider.slick({
                         dots: true,
-                        infinite: $(selector).children().length > 3, // Loop only if there are enough slides
+                        infinite: slideCount > 3,
                         speed: 500,
                         slidesToShow: 3,
                         slidesToScroll: 1,
@@ -143,19 +143,11 @@
                         autoplaySpeed: 3000,
                         responsive: [{
                             breakpoint: 1024,
-                            settings: {
-                                slidesToShow: 2,
-                                slidesToScroll: 1,
-                                infinite: $(selector).children().length > 2,
-                            },
+                            settings: { slidesToShow: 2, slidesToScroll: 1, infinite: slideCount > 2 }
                         }, {
                             breakpoint: 600,
-                            settings: {
-                                slidesToShow: 1,
-                                slidesToScroll: 1,
-                                infinite: $(selector).children().length > 1,
-                            },
-                        }, ],
+                            settings: { slidesToShow: 1, slidesToScroll: 1, infinite: slideCount > 1 }
+                        }]
                     });
                 }
             }
@@ -163,13 +155,8 @@
             initializeSlick("#campaign-slider");
             initializeSlick("#template-slider");
 
-            // Pause sliding on mouse enter and resume on mouse leave
-            $(".slider").on("mouseenter", function() {
-                $(this).slick("slickPause");
-            });
-            $(".slider").on("mouseleave", function() {
-                $(this).slick("slickPlay");
-            });
+            $(".slider").on("mouseenter", function() { $(this).slick("slickPause"); });
+            $(".slider").on("mouseleave", function() { $(this).slick("slickPlay"); });
         });
     </script>
 </body>
