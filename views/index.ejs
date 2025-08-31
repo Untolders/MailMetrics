@@ -1,311 +1,176 @@
 <% layout('/layouts/boilerplate')%>
 
+<link href="/css/index.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <link href="/css/index.css" rel="stylesheet" type="text/css" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"
-    />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
 
-  <body>
+<body>
     <header>
-    
+        </header>
+
     <main>
-      <section id="welcome">
-        <h2>Welcome to MailMetrics</h2>
-        <p style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-          Optimize your email campaigns using A/B testing! Our platform helps
-          you increase open rates, click-through rates, and overall engagement.
-        </p>
-      </section>
-
-      
-
-      <div class="container mt-4">
-        <section id="quick-actions">
-            
-            <div class="row row-cols-1 row-cols-md-2 g-4">
-              <a href="/MailMetrics/email">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title offset-4 col-6"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-rocket-takeoff-fill" viewBox="0 0 16 16">
-                              <path d="M12.17 9.53c2.307-2.592 3.278-4.684 3.641-6.218.21-.887.214-1.58.16-2.065a3.6 3.6 0 0 0-.108-.563 2 2 0 0 0-.078-.23V.453c-.073-.164-.168-.234-.352-.295a2 2 0 0 0-.16-.045 4 4 0 0 0-.57-.093c-.49-.044-1.19-.03-2.08.188-1.536.374-3.618 1.343-6.161 3.604l-2.4.238h-.006a2.55 2.55 0 0 0-1.524.734L.15 7.17a.512.512 0 0 0 .433.868l1.896-.271c.28-.04.592.013.955.132.232.076.437.16.655.248l.203.083c.196.816.66 1.58 1.275 2.195.613.614 1.376 1.08 2.191 1.277l.082.202c.089.218.173.424.249.657.118.363.172.676.132.956l-.271 1.9a.512.512 0 0 0 .867.433l2.382-2.386c.41-.41.668-.949.732-1.526zm.11-3.699c-.797.8-1.93.961-2.528.362-.598-.6-.436-1.733.361-2.532.798-.799 1.93-.96 2.528-.361s.437 1.732-.36 2.531Z"/>
-                              <path d="M5.205 10.787a7.6 7.6 0 0 0 1.804 1.352c-1.118 1.007-4.929 2.028-5.054 1.903-.126-.127.737-4.189 1.839-5.18.346.69.837 1.35 1.411 1.925"/>
-                            </svg> <strong> Campaigns</strong></h3>
-                            <p class="card-text">Start a new email campaign and test different variants.</p>
-                             
-                        </div>
-                    </div>
-                </div>
-              </a>
-                <a href="/MailMetrics/email">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title offset-4 col-6"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-envelope-paper-fill" viewBox="0 0 16 16">
-                              <path fill-rule="evenodd" d="M6.5 9.5 3 7.5v-6A1.5 1.5 0 0 1 4.5 0h7A1.5 1.5 0 0 1 13 1.5v6l-3.5 2L8 8.75zM1.059 3.635 2 3.133v3.753L0 5.713V5.4a2 2 0 0 1 1.059-1.765M16 5.713l-2 1.173V3.133l.941.502A2 2 0 0 1 16 5.4zm0 1.16-5.693 3.337L16 13.372v-6.5Zm-8 3.199 7.941 4.412A2 2 0 0 1 14 16H2a2 2 0 0 1-1.941-1.516zm-8 3.3 5.693-3.162L0 6.873v6.5Z"/>
-                            </svg><strong> Templates</strong></h3>
-                            <p class="card-text">View and edit your email templates.</p>
-                          
-                        </div>
-                    </div>
-                </div>
-              </a>
-             <a href="/MailMetrics/subscribers">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title offset-4 col-6"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-                              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                            </svg> <strong>Subscribers</strong></h3>
-                            <p class="card-text">View and manage your subscriber list.</p>
-                          
-                        </div>
-                    </div>
-                </div>
-              </a>
-             <a href="/MailMetrics/campaigns">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title offset-4 col-6"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bar-chart-line-fill" viewBox="0 0 16 16">
-                              <path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1z"/>
-                            </svg><strong> Analyse</strong></h3>
-                            <p class="card-text">See the performance of your campaigns.</p>
-                           
-                        </div>
-                    </div>
-                </div>
-              </a>
-            </div>
+        <section id="welcome" class="text-center py-5">
+            <h1 class="animate__animated animate__fadeInDown">Welcome to MailMetrics <i class="fas fa-paper-plane animate__animated animate__pulse animate__infinite"></i></h1>
+            <p class="welcome-subtitle animate__animated animate__fadeInUp">
+                Unlock the full potential of your email campaigns with smart A/B testing.
+                <br> Elevate your open rates, click-throughs, and overall engagement like never before!
+            </p>
         </section>
-    </div>
 
-
-      <!-- <section id="quick-actions">
-        <h2>Quick Actions</h2>
-        <div class="actions">
-          <div class="action-item">
-            <a href="MailMetrics/email">
-              <h3>Create New Campaign</h3>
-              <p>Start a new email campaign and test different variants.</p>
-            </a>
-          </div>
-          <div class="action-item">
-            <a href="MailMetrics/email">
-              <h3>Manage Templates</h3>
-              <p>View and edit your email templates.</p>
-            </a>
-          </div>
-          <div class="action-item">
-            <a href="MailMetrics/subscribers">
-              <h3>Manage Subscribers</h3>
-              <p>View and manage your subscriber list.</p>
-            </a>
-          </div>
-          <div class="action-item">
-            <a href="MailMetrics/campaigns">
-              <h3>View Dashboard</h3>
-              <p>See the performance of your campaigns.</p>
-            </a>
-          </div>
-        </div>
-      </section> -->
-
-      <section id="recent-campaigns">
-        <h2>Recent Campaigns</h2>
-       
-        <div class="slider" id="campaign-slider">
-          <% if(allCampaigns.length===0){%>
-            <p class="no-campaign-message"> No Recent Campaign!</p>
-
-            <% } else{ %>
-            <% for(let i = allCampaigns.length - 1; i >= 0 &&  i>=allCampaigns.length - 10; i--) { %>
-            <a href="/MailMetrics/campaigns/analyse/<%= allCampaigns[i]._id%>">
-                <div class="template-item">
-                    <% if(allCampaigns[i].emailId.length <=15){ %>
-                        <h3 style="background-color: #c5c7c9; border-radius: 5%;"><%= allCampaigns[i].emailId.emailId.title %></h3>
-                    <% } else { %>
-                        <h3 style="background-color: #c5c7c9; border-radius: 5%;"><% for(let j=0;j<15;j++){%><%=allCampaigns[i].emailId.title[j]%><%}%>...</h3>
-                    <% } %>
-                    <% if(allCampaigns[i].emailId.subject.length <=27){ %>
-                        <p><%= allCampaigns[i].emailId.subject %></p>
-                    <% } else { %>
-                        <p><% for(let j=0;j<27;j++){%><%=allCampaigns[i].emailId.subject[j]%><%}%>...</p>
-                    <% } %>
+        <div class="container mt-5">
+            <section id="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <div class="col">
+                        <a href="/MailMetrics/email" class="action-card-link">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-rocket"></i>
+                                        <strong>Campaigns</strong>
+                                    </h3>
+                                    <p class="card-text">Launch and manage your email campaigns with diverse testing variants.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/MailMetrics/email" class="action-card-link">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-file-alt"></i>
+                                        <strong>Templates</strong>
+                                    </h3>
+                                    <p class="card-text">Design and refine your responsive email templates with ease.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/MailMetrics/subscribers" class="action-card-link">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-users"></i>
+                                        <strong>Subscribers</strong>
+                                    </h3>
+                                    <p class="card-text">Effortlessly view, organize, and grow your subscriber lists.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/MailMetrics/campaigns" class="action-card-link">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-chart-line"></i>
+                                        <strong>Analyse</strong>
+                                    </h3>
+                                    <p class="card-text">Gain deep insights into your campaign performance with detailed analytics.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </a>
-            <% } %>
-            <% } %>
-         </div>
-      </section>
+            </section>
+        </div>
 
-      <section id="recent-templates">
-        <h2>Recent Templates</h2>
-        <div class="slider" id="template-slider">
-          <% if(allemail.length===0){%>
-            <p class="no-campaign-message"> No Recent Template!</p>
-
-            <% } else{ %>
-            <% for(let i = allemail.length - 1; i >= 0 &&  i>=allemail.length - 10; i--) { %>
-                <a href="/MailMetrics/<%= allemail[i]._id%>">
-                    <div class="template-item">
-                        <% if(allemail[i].title.length <=15){ %>
-                            <h3 style="background-color: #c5c7c9; border-radius: 5%;"><%= allemail[i].title %></h3>
-                        <% } else { %>
-                            <h3 style="background-color: #c5c7c9; border-radius: 5%;"><% for(let j=0;j<15;j++){%><%=allemail[i].title[j]%><%}%>...</h3>
-                        <% } %>
-                        <% if(allemail[i].subject.length <=27){ %>
-                            <p><%= allemail[i].subject %></p>
-                        <% } else { %>
-                            <p><% for(let j=0;j<27;j++){%><%=allemail[i].subject[j]%><%}%>...</p>
-                        <% } %>
-                        
+        <section id="recent-campaigns" class="my-5">
+            <h2>Recent Campaigns</h2>
+            <div class="slider" id="campaign-slider">
+                <% if(allCampaigns.length === 0) { %>
+                <div class="no-content-message">
+                    <p>No recent campaigns to display. Start a new one today!</p>
+                </div>
+                <% } else { %>
+                <% for(let i = allCampaigns.length - 1; i >= 0 && i >= allCampaigns.length - 10; i--) { %>
+                <a href="/MailMetrics/campaigns/analyse/<%= allCampaigns[i]._id%>">
+                    <div class="slider-item">
+                        <span class="item-icon"><i class="fas fa-envelope-open-text"></i></span>
+                        <h3 class="item-title"><%= allCampaigns[i].emailId.title %></h3>
+                        <p class="item-subject"><%= allCampaigns[i].emailId.subject %></p>
                     </div>
                 </a>
-            <% } %>
-            <% } %>
-        </div>
-      </section>
+                <% } %>
+                <% } %>
+            </div>
+        </section>
+
+        <section id="recent-templates" class="my-5">
+            <h2>Recent Templates</h2>
+            <div class="slider" id="template-slider">
+                <% if(allemail.length === 0) { %>
+                <div class="no-content-message">
+                    <p>No recent templates to display. Create a new template to get started!</p>
+                </div>
+                <% } else { %>
+                <% for(let i = allemail.length - 1; i >= 0 && i >= allemail.length - 10; i--) { %>
+                <a href="/MailMetrics/<%= allemail[i]._id%>">
+                    <div class="slider-item">
+                        <span class="item-icon"><i class="fas fa-file-code"></i></span>
+                        <h3 class="item-title"><%= allemail[i].title %></h3>
+                        <p class="item-subject"><%= allemail[i].subject %></p>
+                    </div>
+                </a>
+                <% } %>
+                <% } %>
+            </div>
+        </section>
     </main>
-    
+
     <script>
-      $(document).ready(function () {
-        $("#campaign-slider").slick({
-          dots: true,
-          infinite: true,
-          speed: 300,
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          responsive: [
-            {
-              breakpoint: 1024,
-              settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1,
-                infinite: true,
-                dots: true,
-              },
-            },
-            {
-              breakpoint: 600,
-              settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1,
-              },
-            },
-          ],
-        });
+        $(document).ready(function() {
+            function initializeSlick(selector) {
+                if ($(selector).children().length > 1) { // Only initialize if there are items to slide
+                    $(selector).slick({
+                        dots: true,
+                        infinite: $(selector).children().length > 3, // Loop only if there are enough slides
+                        speed: 500,
+                        slidesToShow: 3,
+                        slidesToScroll: 1,
+                        arrows: true,
+                        autoplay: true,
+                        autoplaySpeed: 3000,
+                        responsive: [{
+                            breakpoint: 1024,
+                            settings: {
+                                slidesToShow: 2,
+                                slidesToScroll: 1,
+                                infinite: $(selector).children().length > 2,
+                            },
+                        }, {
+                            breakpoint: 600,
+                            settings: {
+                                slidesToShow: 1,
+                                slidesToScroll: 1,
+                                infinite: $(selector).children().length > 1,
+                            },
+                        }, ],
+                    });
+                }
+            }
 
-        $("#template-slider").slick({
-          dots: true,
-          infinite: true,
-          speed: 300,
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          responsive: [
-            {
-              breakpoint: 1024,
-              settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1,
-                infinite: true,
-                dots: true,
-              },
-            },
-            {
-              breakpoint: 600,
-              settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1,
-              },
-            },
-          ],
+            initializeSlick("#campaign-slider");
+            initializeSlick("#template-slider");
+
+            // Pause sliding on mouse enter and resume on mouse leave
+            $(".slider").on("mouseenter", function() {
+                $(this).slick("slickPause");
+            });
+            $(".slider").on("mouseleave", function() {
+                $(this).slick("slickPlay");
+            });
         });
-      });
     </script>
-  </body>
-
-  <script>
-    $(document).ready(function () {
-      // Initialize Slick carousel for recent campaigns slider
-      $("#campaign-slider").slick({
-        dots: true,
-        infinite: true,
-        speed: 300,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        responsive: [
-          {
-            breakpoint: 1024,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              infinite: true,
-              dots: true,
-            },
-          },
-          {
-            breakpoint: 600,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-            },
-          },
-        ],
-      });
-
-      // Pause sliding on mouse enter and resume on mouse leave for recent campaigns slider
-      $("#campaign-slider").on("mouseenter", function () {
-        $(this).slick("slickPause");
-      });
-
-      $("#campaign-slider").on("mouseleave", function () {
-        $(this).slick("slickPlay");
-      });
-
-      // Initialize Slick carousel for recent templates slider
-      $("#template-slider").slick({
-        dots: true,
-        infinite: true,
-        speed: 300,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        responsive: [
-          {
-            breakpoint: 1024,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              infinite: true,
-              dots: true,
-            },
-          },
-          {
-            breakpoint: 600,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-            },
-          },
-        ],
-      });
-
-      // Pause sliding on mouse enter and resume on mouse leave for recent templates slider
-      $("#template-slider").on("mouseenter", function () {
-        $(this).slick("slickPause");
-      });
-
-      $("#template-slider").on("mouseleave", function () {
-        $(this).slick("slickPlay");
-      });
-    });
-  </script>
+</body>
 </html>

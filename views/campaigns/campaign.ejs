@@ -1,99 +1,95 @@
 <% layout('/layouts/boilerplate')%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/css/campaigns.css">
 
+<div class="campaign-header">
+    <h1><i class="fas fa-rocket"></i> All Campaigns</h1>
+    <a href="#" class="create-campaign-btn"><i class="fas fa-plus"></i> Create New Campaign</a>
+</div>
 
-<style>
-   h3 {
-       text-align: center;
-       margin-top: 20px;
-   }
-
-   .btn-success {
-       display: block;
-       margin: 0 auto;
-       margin-bottom: 20px;
-   }
-
-   .no-campaign-message {
-       font-size: 1.5rem;
-       font-weight: bold;
-       color: red;
-       text-align: center;
-   }
-
-   .card {
-       margin: 1rem auto;
-       border-radius: 5px;
-       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-       transition: transform 0.3s;
-   }
-
-   .card:hover {
-       transform: translateY(-10px);
-   }
-
-   .card-header {
-       background-color:  #6c757d;
-       color: white;
-       font-weight: bold;
-       text-align: center;
-   }
-
-   .card-title {
-       color: #6c757d; /* Secondary color for the title */
-   }
-
-   .card-body {
-       text-align: center;
-   }
-
-   .card-footer {
-       background-color: #f8f9fa;
-       color: #6c757d;
-       font-size: 0.9rem;
-       text-align: center;
-   }
-
-   .listing-links {
-       text-decoration: none;
-   }
-
-   .text-secondary {
-       color: #6c757d !important;
-   }
-</style>
-<div>
-    <h3>All Campaigns:</h3><hr/><br/>
-    <% if (allCampaigns.length === 0) { %>
-        <h3 class="no-campaign-message">You have not created any Campaign!</h3>
-    <% } else { %>
+<% if (allCampaigns.length === 0) { %>
+    <h3 class="no-campaign-message">You haven't created any Campaigns yet!</h3>
+<% } else { %>
     <div class="container">
         <div class="row">
-            <% for(let campaign of allCampaigns){ %>
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <a href="/MailMetrics/campaigns/analyse/<%=campaign._id%>" class="listing-links">
-                    <div class="card border-dark h-100">
-                         <% if(campaign.emailId.title.length<=27){ %>
-                        <div class="card-header ">Title: <%= campaign.emailId.title %></div>
-                        <% } else {%>
-                            <div class="card-header ">Title: <%= campaign.emailId.title.substring(0,24) %>...</div>
+            <% allCampaigns.forEach((campaign, i) => { %>
 
-                            <% } %>
-                        <div class="card-body text-primary">
-                            <h5 class="card-title">
-                                <textarea class="text-primary" disabled><%= campaign.emailId.subject %></textarea>
-                            </h5>
+                <%# --- Logic Block for Calculations --- %>
+                <%
+                    const totalReceivers = campaign.receiver.length;
+                    const totalViews = campaign.data.views.length;
+                    const totalClicks = campaign.data.clicks.length;
+
+                    // Calculate rates, preventing division by zero
+                    const openRate = totalReceivers > 0 ? ((totalViews / totalReceivers) * 100).toFixed(0) : 0;
+                    const clickRate = totalReceivers > 0 ? ((totalClicks / totalReceivers) * 100).toFixed(0) : 0;
+                    
+                    // Format the date, with a fallback if not sent
+                    const sentDate = campaign.sendAt && campaign.sendAt.length > 0
+                        ? new Date(campaign.sendAt[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                        : 'Not Sent';
+                %>
+
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <a href="/MailMetrics/campaigns/analyse/<%= campaign._id %>" class="listing-links">
+                        <div class="card campaign-card h-100" style="--delay: <%= i %>">
+                            
+                            <div class="card-header">
+                                <span class="card-title-text" title="<%= campaign.emailId.title %>">
+                                    <%= campaign.emailId.title %>
+                                </span>
+                                <span class="card-status">
+                                    Sent
+                                </span>
+                            </div>
+
+                            <div class="card-body">
+                                <p class="card-subject" title="<%= campaign.emailId.subject %>">
+                                    <%= campaign.emailId.subject %>
+                                </p>
+                            </div>
+
+                            <div class="card-metrics">
+                                <div class="metric-group">
+                                    <div class="metric-item">
+                                        <div class="metric-details">
+                                            <span class="label"><i class="fas fa-envelope-open-text"></i> Open Rate</span>
+                                            <span class="raw-counts"><%= totalViews %> / <%= totalReceivers %> opens</span>
+                                        </div>
+                                        <span class="count"><%= openRate %>%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" style="width: <%= openRate %>%;"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-group" style="margin-top: 1rem;">
+                                    <div class="metric-item">
+                                        <div class="metric-details">
+                                            <span class="label"><i class="fas fa-mouse-pointer"></i> Click Rate</span>
+                                            <span class="raw-counts"><%= totalClicks %> / <%= totalReceivers %> clicks</span>
+                                        </div>
+                                        <span class="count"><%= clickRate %>%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" style="width: <%= clickRate %>%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer">
+                                <div class="footer-item" title="<%= campaign.emailId.sender %>">
+                                    <i class="fas fa-user-circle"></i> 
+                                    <span><%= campaign.emailId.sender.substring(0, 15) %>...</span>
+                                </div>
+                                <div class="footer-item">
+                                    <i class="fas fa-calendar-alt"></i> 
+                                    <span><%= sentDate %></span>
+                                </div>
+                            </div>
                         </div>
-                        <% if(campaign.emailId.sender.length<=27){ %>
-                        <div class="card-footer border-success">Sender: <%= campaign.emailId.sender %></div>
-                        <% } else { %>
-
-                            <div class="card-footer border-success">Sender: <%= campaign.emailId.sender.substring(0,24) %>...</div>
-                            <% } %>
-                    </div>
-                </a>
-            </div>
-            <% } %>
+                    </a>
+                </div>
+            <% }) %>
         </div>
     </div>
-    <% } %>
-</div>
+<% } %>
