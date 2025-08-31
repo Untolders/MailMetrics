@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg fixed-top navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/MailMetrics"><i class="fa-regular fa-envelope" style="color: #308d46;"></i></a>
+          <a class="navbar-brand" href="/MailMetrics"><i class="fa-regular fa-envelope" style="color: #308d46;"></i></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -10,33 +10,30 @@
                     <a class="nav-link" href="/MailMetrics">Explore</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/senderEmail">SenderEmail</a>
+                    <a class="nav-link" href="/senderEmail">Sender Emails</a>
                 </li>
-            </ul>
-            
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/MailMetrics/campaigns">Campaign</a>
+                    <a class="nav-link" href="/MailMetrics/campaigns">Campaigns</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/MailMetrics/email">Templates</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/MailMetrics/subscribers">Subscriber</a>
+                    <a class="nav-link" href="/MailMetrics/subscribers">Subscribers</a>
                 </li>
-                
-                <%# Combined login/logout logic into a single if/else block %>
+            </ul>
+            
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
                 <% if (currUser) { %>
                     <li class="nav-item">
-                        <%# Applied button classes directly to the <a> tag for correct HTML %>
-                        <a class="btn btn-secondary" href="/logout">Logout</a>
+                        <a class="btn btn-outline-secondary rounded-pill px-3" href="/logout">Logout</a>
                     </li>
                 <% } else { %>
                     <li class="nav-item">
-                        <a class="btn btn-secondary me-2" href="/signup">Signup</a>
+                        <a class="nav-link" href="/login">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-secondary" href="/login">Login</a>
+                        <a class="btn btn-primary rounded-pill px-3" href="/signup">Signup</a>
                     </li>
                 <% } %> 
             </ul>
