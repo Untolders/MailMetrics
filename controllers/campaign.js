@@ -1,12 +1,12 @@
 const Email = require("../models/email.js");
 const Subscriber = require("../models/subscriber.js");
 const Campaign = require("../models/campaign.js");
-const count = require("../utils/helper.js");
 const SenderEmail = require("../models/senderEmail.js");
 const { createUserTransporter } = require('../utils/mail.js');
 const { decryptToken } = require("../utils/hash.js");
+const countHelper = require("../utils/helper.js");
 
-// ================== Campaign List ==================
+// ----------------- List all campaigns -----------------
 module.exports.index = async (req, res, next) => {
     try {
         const user = req.user;
@@ -18,7 +18,7 @@ module.exports.index = async (req, res, next) => {
     }
 };
 
-// ================== Render Send Email ==================
+// ----------------- Render send email page -----------------
 module.exports.renderSendEmail = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -27,32 +27,32 @@ module.exports.renderSendEmail = async (req, res, next) => {
         const allSenderEmail = await SenderEmail.find({ owner: req.user._id });
 
         if (!email) {
-            req.flash("error", "Email not Exist!");
+            req.flash("error", "Email not exist!");
             return res.redirect("/MailMetrics");
         }
 
         res.render("campaigns/sendEmail.ejs", { email, allSubscribers, allSenderEmail });
     } catch (err) {
-        console.error("Error rendering send email page:", err);
+        console.error(err);
         next(err);
     }
 };
 
-// ================== Send Email ==================
+// ----------------- Send Email -----------------
 module.exports.sendEmail = async (req, res, next) => {
-    try {
-        const { id } = req.params;
+    const { id } = req.params;
 
+    try {
         let campaign = await Campaign.findOne({ emailId: id });
+
         if (!campaign) {
             campaign = new Campaign({
                 emailId: id,
                 data: { views: [], clicks: [] },
-                owner: req.user._id,
+                owner: req.user._id
             });
         }
 
-        campaign.sendAt = campaign.sendAt || [];
         campaign.sendAt.push(new Date());
 
         const draftEmail = await Email.findById(id);
@@ -61,18 +61,31 @@ module.exports.sendEmail = async (req, res, next) => {
             return res.redirect("/MailMetrics");
         }
 
-        let receiversID = req.body.receiver;
-        if (!Array.isArray(receiversID)) receiversID = [receiversID];
-
+        const receiversID = req.body.receiver;
         const receivers = [];
+
         for (let receiverID of receiversID) {
             const receiver = await Subscriber.findById(receiverID);
             if (receiver) receivers.push(receiver);
         }
 
-        if (!receivers.length) {
-            req.flash("error", "Subscriber not found!");
+        if (receivers.length === 0) {
+            req.flash("error", "No subscribers found!");
             return res.redirect("/MailMetrics");
+        }
+
+        const emailBody = draftEmail.body;
+        const myServerDomain = `${process.env.DOMAIN}/MailMetrics/campaigns`;
+
+        function transformLinks(emailBody, receiverId, domain, emailID, encode = true) {
+            const linkRegex = /<a\s+href="([^"]+)"\s*(.*?)>(.*?)<\/a>/g;
+            let transformedBody = emailBody.replace(linkRegex, (match, p1, p2, p3) => {
+                const originalLink = encode ? encodeURIComponent(p1) : p1;
+                const newLink = `${domain}/${emailID}/${receiverId}?token=${originalLink}`;
+                return `<a href="${newLink}" ${p2}>${p3}</a>`;
+            });
+            transformedBody += `<img alt="tracker" src='${process.env.DOMAIN}/MailMetrics/campaigns/open/${campaign._id}/${receiverId}/tracker.png' style="display:none;" />`;
+            return transformedBody;
         }
 
         const senderEmail = await SenderEmail.findById(req.body.senderEmail);
@@ -85,55 +98,31 @@ module.exports.sendEmail = async (req, res, next) => {
         const password = decryptToken({ iv: senderEmail.salt, encryptedData: senderEmail.appPassword });
         const userTransporter = createUserTransporter(email, password);
 
-        const myServerDomain = `${process.env.DOMAIN}/MailMetrics/campaigns`;
-
-        // Function to transform links & add tracker
-        const transformLinks = (emailBody, receiverId, myServerDomain, emailID, encode = true) => {
-            const linkRegex = /<a\s+href="([^"]+)"\s*(.*?)>(.*?)<\/a>/g;
-            let transformedBody = emailBody.replace(linkRegex, (match, p1, p2, p3) => {
-                const originalLink = encode ? encodeURIComponent(p1) : p1;
-                const newLink = `${myServerDomain}/${emailID}/${receiverId}?token=${originalLink}`;
-                return `<a href="${newLink}" ${p2}>${p3}</a>`;
-            });
-            transformedBody += `<img alt="logo" src='${process.env.DOMAIN}/MailMetrics/campaigns/open/${campaign._id}/${receiverId}/tracker.png' style="display:none"/>`;
-            return transformedBody;
-        };
-
-        // Helper to send email using async/await
-        const sendMailAsync = (transporter, mailOptions) => {
-            return new Promise((resolve, reject) => {
-                transporter.sendMail(mailOptions, (err, info) => {
-                    if (err) reject(err);
-                    else resolve(info);
-                });
-            });
-        };
-
+        // Send emails
         for (let receiver of receivers) {
-            const unencodedEmailBody = transformLinks(draftEmail.body, receiver._id, myServerDomain, id, false);
+            const htmlBody = transformLinks(emailBody, receiver._id, myServerDomain, id, false);
             const mailOptions = {
                 from: `"${draftEmail.sender}" <${email}>`,
                 to: receiver.email,
                 subject: draftEmail.subject,
-                html: unencodedEmailBody
+                html: htmlBody
             };
+
             try {
-                await sendMailAsync(userTransporter, mailOptions);
+                await userTransporter.sendMail(mailOptions);
                 console.log(`Email sent to ${receiver.email}`);
-            } catch (err) {
-                console.error("Error sending email:", err);
+            } catch (error) {
+                console.error("Error sending email:", error);
             }
 
-            campaign.receiver = campaign.receiver || [];
             campaign.receiver.push(receiver._id);
         }
 
         campaign.senderEmail = senderEmail;
         await campaign.save();
 
-        req.flash("success", "Email sent successfully!");
+        req.flash("success", "Emails sent successfully!");
         res.redirect("/MailMetrics/campaigns");
-
     } catch (error) {
         console.error("Error sending email:", error);
         req.flash("error", "Error sending email");
@@ -141,10 +130,61 @@ module.exports.sendEmail = async (req, res, next) => {
     }
 };
 
-// ================== Campaign Analysis ==================
-module.exports.analyse = async (req, res, next) => {
+// ----------------- Track Open -----------------
+module.exports.open = async (req, res) => {
+    const { campaignId, subscriberId } = req.params;
+    const buf = Buffer.from([
+        0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00,
+        0x01, 0x00, 0x80, 0x00, 0x00, 0xff, 0xff, 0xff,
+        0x00, 0x00, 0x00, 0x2c, 0x00, 0x00, 0x00, 0x00,
+        0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x02, 0x44,
+        0x01, 0x00, 0x3b
+    ]);
+    res.set('Content-Type', 'image/png');
+    res.end(buf, 'binary');
+
     try {
-        const { id } = req.params;
+        const campaign = await Campaign.findById(campaignId);
+        const subscriber = await Subscriber.findById(subscriberId);
+        if (campaign && subscriber) {
+            campaign.data = campaign.data || {};
+            campaign.data.views = campaign.data.views || [];
+            campaign.data.views.push({ subscriber: subscriberId, time: new Date() });
+            await campaign.save();
+        }
+    } catch (err) {
+        console.error("Error tracking open:", err);
+    }
+};
+
+// ----------------- Track Click -----------------
+module.exports.click = async (req, res) => {
+    const { emailId, subscriberId } = req.params;
+    const link = req.query.token;
+
+    try {
+        const campaign = await Campaign.findOne({ emailId });
+        const subscriber = await Subscriber.findById(subscriberId);
+
+        if (link && campaign && subscriber) {
+            campaign.data = campaign.data || {};
+            campaign.data.clicks = campaign.data.clicks || [];
+            campaign.data.clicks.push({ subscriber: subscriberId, time: new Date() });
+            await campaign.save();
+            res.redirect(link);
+        } else {
+            res.status(400).send("Bad Request: Missing token");
+        }
+    } catch (err) {
+        console.error("Error tracking click:", err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+// ----------------- Campaign Analysis -----------------
+module.exports.analyse = async (req, res) => {
+    const { id } = req.params;
+    try {
         const campaign = await Campaign.findById(id).populate('receiver data.views data.clicks');
         if (!campaign) {
             req.flash("error", "Campaign not found!");
@@ -152,57 +192,13 @@ module.exports.analyse = async (req, res, next) => {
         }
 
         const subscriberIds = campaign.receiver.map(r => r._id);
-        res.render("campaigns/analyse.ejs", { campaign, count, subscriberIds });
+        res.render("campaigns/analyse.ejs", { campaign, count: countHelper, subscriberIds });
     } catch (err) {
-        console.error("Error in analyse:", err);
-        next(err);
+        console.error(err);
+        req.flash("error", "Error rendering analysis");
+        res.redirect("/MailMetrics");
     }
 };
 
-// ================== Click Tracker ==================
-module.exports.click = async (req, res) => {
-    try {
-        const { emailId, subscriberId } = req.params;
-        const link = req.query.token;
-        const campaign = await Campaign.findOne({ emailId });
-        const subscriber = await Subscriber.findById(subscriberId);
-
-        if (!link || !campaign || !subscriber) return res.status(400).send("Bad Request");
-
-        campaign.data = campaign.data || { views: [], clicks: [] };
-        campaign.data.clicks.push({ subscriber: subscriberId, time: new Date() });
-        await campaign.save();
-
-        res.redirect(link);
-    } catch (err) {
-        console.error("Error in click tracker:", err);
-        res.status(500).send("Server Error");
-    }
-};
-
-// ================== Open Tracker ==================
-module.exports.open = async (req, res) => {
-    const { campaignId, subscriberId } = req.params;
-
-    const buf = Buffer.from([
-        0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00,
-        0x80, 0x00, 0x00, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x2c,
-        0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x02,
-        0x02, 0x44, 0x01, 0x00, 0x3b
-    ]);
-
-    res.set('Content-Type', 'image/png');
-    res.end(buf, 'binary');
-
-    try {
-        const campaign = await Campaign.findById(campaignId);
-        const subscriber = await Subscriber.findById(subscriberId);
-        if (!campaign || !subscriber) return;
-
-        campaign.data = campaign.data || { views: [], clicks: [] };
-        campaign.data.views.push({ subscriber: subscriberId, time: new Date() });
-        await campaign.save();
-    } catch (err) {
-        console.error("Error in open tracker:", err);
-    }
-};
+// ----------------- Export Helper Functions -----------------
+module.exports.countOccurrences = countHelper.countOccurrences;
