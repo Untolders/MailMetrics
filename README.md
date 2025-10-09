@@ -1,7 +1,5 @@
-# Email Optimization Hackathon: A/B Testing for Engagement Boost
-
 ## Description:
-Developed a robust A/B testing platform to optimize email engagement metrics for a company's marketing campaign. This can be used for sending  newsletters to its subscriber base and  improve open rates, click-through rates (CTR), and overall engagement by analysing the data. This solution should enable marketers to conduct A/B tests on various elements of their email campaigns and provide actionable insights for future optimizations.
+Developed a robust  platform to optimize email engagement metrics for a company's marketing campaign. This can be used for sending  newsletters to its subscriber base and  improve open rates, click-through rates (CTR), and overall engagement by analysing the data. This solution should enable marketers to conduct A/B tests on various elements of their email campaigns and provide actionable insights for future optimizations.
 
 ## Key Features:
 
@@ -189,7 +187,7 @@ To use the application, follow these steps:
 
 
 ## Website Link : 
-<a href="https://mailmetrics-3.onrender.com/MailMetrics/">MailMetrics</a>
+<a href="https://mail-metrics.vercel.app/MailMetrics">MailMetrics</a>
 
 
 
